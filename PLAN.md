@@ -18,6 +18,7 @@ Este proyecto convierte *Data Governance Handbook* (Wendy S. Batchelder, Packt 2
   2. `uv run pytest` y `uv run ruff check .` pasan en verde.
   3. El README del capítulo explica las decisiones y conclusiones, enlazadas con los conceptos del libro.
   4. La checklist de la sección 6 está actualizada.
+  5. El recorrido paso a paso del [README raíz](README.md) incluye el paso del capítulo: comando, dependencias, qué mirar y qué probar.
 
 **Stack:** Python 3.12 (gestionado con uv), DuckDB, pandas, pandera, Faker, pydantic, PyYAML, rapidfuzz, sqlglot, networkx, matplotlib, jinja2, typer, rich, pytest y ruff. Todo se ejecuta en local, sin servicios externos.
 

@@ -1,41 +1,147 @@
 # Data Governance Lab
 
-*Data Governance Handbook* (Wendy S. Batchelder, Packt 2024) convertido en 17 microproyectos prácticos, uno por capítulo, sobre la empresa ficticia **NovaMercado**.
+*Data Governance Handbook* (Wendy S. Batchelder, Packt 2024) convertido en 17 microproyectos prácticos, uno por capítulo, sobre la empresa ficticia **NovaMercado**, un retail omnicanal con una filial financiera, NovaPay.
 
-El plan completo, el orden de trabajo y el estado de cada capítulo están en [PLAN.md](PLAN.md).
+La idea es leer un capítulo del libro y después ejecutar y explorar su microproyecto: cada concepto del libro se convierte en algo que se puede ejecutar, medir y cambiar. El plan completo está en [PLAN.md](PLAN.md).
+
+## Cómo funciona el repositorio
+
+- **Un capítulo, una carpeta** en [chapters/](chapters/). Cada una tiene:
+  - `README.md`: qué ideas del libro aplica, las decisiones tomadas y las conclusiones para NovaMercado. **Es lo primero que hay que leer.**
+  - `inputs/`: los supuestos de NovaMercado en YAML. Se pueden editar para experimentar.
+  - `run.py`: genera los entregables. Se ejecuta con `uv run python -m chapters.<carpeta>.run`.
+  - `outputs/`: los entregables generados (informes Markdown, gráficos y CSV). No se versionan: se regeneran con `run.py`.
+  - `tests/`: las reglas del capítulo, comprobadas con pytest.
+- **Los capítulos se encadenan.** Cada uno reutiliza lo que dejaron los anteriores: el valor del capítulo 1, los stakeholders del 2, los roles del 3, los indicadores del 4, etc. Por eso conviene seguirlos en orden.
+- **Hay dos tipos de capítulo.** Los de gestión (1-3) solo leen YAML. Desde el capítulo 4, los capítulos trabajan sobre un **warehouse DuckDB** con datos sintéticos de NovaMercado, que se genera en el paso 0.
 
 ## Requisitos
 
 [uv](https://docs.astral.sh/uv/). uv instala Python 3.12 automáticamente.
 
-## Instalación
+## Recorrido paso a paso
+
+| Paso | Capítulo del libro | Comando | Necesita |
+|---:|---|---|---|
+| 0 | Preparación | `uv sync` y `uv run dglab build` | — |
+| 1 | What Is Data Governance? | `uv run python -m chapters.ch01_que_es_gobierno_datos.run` | — |
+| 2 | How to Build a Coalition of Advocates | `uv run python -m chapters.ch02_coalicion_defensores.run` | — |
+| 3 | Building a High-Performing Team | `uv run python -m chapters.ch03_equipo_alto_rendimiento.run` | Inputs del cap. 1 |
+| 4 | Baseline Your Organization | `uv run python -m chapters.ch04_linea_base_madurez.run` | Warehouse e inputs del cap. 3 |
+| 5 | Defining Success and Aligning on Outcomes | `uv run python -m chapters.ch05_exito_y_resultados.run` | Warehouse e inputs de los caps. 1 y 2 |
+| 6 | Metadata Management | `uv run python -m chapters.ch06_gestion_metadatos.run` | Warehouse e inputs del cap. 3 |
+| 7-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+
+"Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
+
+### Paso 0. Preparar el entorno y los datos
 
 ```bash
-uv sync
+uv sync            # instala Python 3.12 y las dependencias
+uv run dglab build # genera los datos sintéticos y construye el warehouse DuckDB
+uv run pytest      # opcional: comprueba que todo funciona
 ```
 
-## Uso
+- `dglab build` crea `data/raw/` (CSV por sistema de origen) y `data/warehouse/novamercado.duckdb`, con las capas raw, staging y curated. Tarda unos segundos y siempre genera los mismos datos (semilla fija).
+- **Para entender los datos:** [docs/datos_sinteticos.md](docs/datos_sinteticos.md) explica los sistemas, las tablas y los defectos de calidad sembrados a propósito, que los capítulos irán descubriendo.
+- **Ojo:** `dglab build` recrea el warehouse desde cero y **borra lo que hayan escrito los capítulos** (por ejemplo, los metadatos del capítulo 6). Después de un rebuild hay que volver a ejecutar esos capítulos.
+
+### Paso 1. ¿Qué es el gobierno de datos?
 
 ```bash
-# Generar los datos sintéticos de NovaMercado y construir el warehouse DuckDB
-uv run dglab build
-
-# Ejecutar el microproyecto de un capítulo
 uv run python -m chapters.ch01_que_es_gobierno_datos.run
+```
 
-# Tests (todos o los de un capítulo)
-uv run pytest
-uv run pytest chapters/ch08_calidad_datos
+- **Qué produce:** data equity (activos − pasivos de datos), caso de negocio con 3 opciones de timeline, charter, política de gobierno de 10 secciones y EDG Scorecard.
+- **Qué mirar:** `outputs/business_case.md` y su gráfico, y `outputs/edg_scorecard.md`.
+- **Qué probar:** en `inputs/business_case.yaml`, pon `include_unvetted_benefits: true` y vuelve a ejecutar. Verás cuánto sube el VAN si se cuentan los beneficios que el negocio aún no ha validado.
+- [README del capítulo](chapters/ch01_que_es_gobierno_datos/README.md)
 
-# Lint
-uv run ruff check .
+### Paso 2. Construir una coalición de defensores
+
+```bash
+uv run python -m chapters.ch02_coalicion_defensores.run
+```
+
+- **Qué produce:** registro y mapa de stakeholders, matriz de influencia e interés, evaluación de sponsors con un caso de negocio piloto y plan de coalición con las señales del comité.
+- **Qué mirar:** `outputs/sponsor_assessment.md` y `outputs/stakeholder_matrix.png`.
+- **Qué probar:** en `inputs/sponsors.yaml`, cambia `reports_to_ceo` del Director de Compras a `true`. Pasa a ser elegible, aunque no supera a la CMO ni al CFO.
+- [README del capítulo](chapters/ch02_coalicion_defensores/README.md)
+
+### Paso 3. Construir un equipo de alto rendimiento
+
+```bash
+uv run python -m chapters.ch03_equipo_alto_rendimiento.run
+```
+
+- **Qué produce:** modelo organizativo recomendado, organigrama y plan de contratación, RACI, cartas y calendario de los foros, inventario del portfolio y brechas de habilidades.
+- **Qué mirar:** `outputs/org_model.md` y `outputs/team_design.md`, que contrasta el coste del equipo con el presupuesto del capítulo 1.
+- **Qué probar:** en `inputs/org_context.yaml`, cambia `capabilities_consistent` a `true`. La recomendación pasa de centralizado a otro modelo.
+- [README del capítulo](chapters/ch03_equipo_alto_rendimiento/README.md)
+
+### Paso 4. Establecer la línea base de la organización
+
+```bash
+uv run python -m chapters.ch04_linea_base_madurez.run
+```
+
+- **Qué produce:** los 10 pasos de una evaluación de madurez. Incluye respuestas simuladas, detección del sesgo de autoevaluación, evidencia objetiva medida en el warehouse, un informe agregado para el comité y otro interno por área, y un plan de mejora.
+- **Qué mirar:** `outputs/maturity_report.md` (agregado), `outputs/maturity_internal.md` (solo para la oficina de datos) y `outputs/improvement_plan.md`, cuyas líneas base salen del warehouse.
+- **Qué probar:** en `inputs/assessment.yaml`, sube el `self_bias` de Ventas y vuelve a ejecutar. Verás cómo crece la diferencia entre la autoevaluación y el consenso del taller.
+- [README del capítulo](chapters/ch04_linea_base_madurez/README.md)
+
+### Paso 5. Definir el éxito y alinearse en resultados
+
+```bash
+uv run python -m chapters.ch05_exito_y_resultados.run
+```
+
+- **Qué produce:** marco de resultados (resultado de negocio → capacidades → entregables → resultados de datos), informe de progreso, roadmap y revisión trimestral (QBR) con cada stakeholder.
+- **Qué mirar:** `outputs/progress_report.md`. Sus "resultados de datos" se **miden en el warehouse** en cada ejecución.
+- **Qué probar:** ejecútalo antes y después del paso 6. Tras el paso 6, "Tablas curated documentadas al 100 %" pasa a estar logrado sin tocar nada de este capítulo.
+- [README del capítulo](chapters/ch05_exito_y_resultados/README.md)
+
+### Paso 6. Gestión de metadatos
+
+```bash
+uv run python -m chapters.ch06_gestion_metadatos.run
+uv run python -m chapters.ch06_gestion_metadatos.marketplace "cifra de ventas"
+```
+
+- **Qué produce:** glosario de negocio, catálogo de datos, clasificación de PII y cumplimiento del estándar de metadatos. Además **escribe en el warehouse** comentarios en tablas y columnas y el esquema `meta`.
+- **Qué mirar:** `outputs/metadata_standards.md` y `outputs/pii_classification.md`. Prueba también el buscador: encuentra "Venta neta" por su sinónimo "cifra de ventas".
+- **Qué probar:** vuelve a ejecutar los pasos 4 y 5. El indicador de tablas documentadas pasa del 0 % al 100 %.
+- **Recuerda:** después de cada `uv run dglab build` hay que volver a ejecutar este paso.
+- [README del capítulo](chapters/ch06_gestion_metadatos/README.md)
+
+### Ejecutar todo de una vez
+
+```bash
+uv run dglab build
+uv run python -m chapters.ch01_que_es_gobierno_datos.run
+uv run python -m chapters.ch02_coalicion_defensores.run
+uv run python -m chapters.ch03_equipo_alto_rendimiento.run
+uv run python -m chapters.ch04_linea_base_madurez.run
+uv run python -m chapters.ch05_exito_y_resultados.run
+uv run python -m chapters.ch06_gestion_metadatos.run
+```
+
+Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de documentar el warehouse. Para ver el avance, vuelve a ejecutar 4 y 5 al final.
+
+## Comandos útiles
+
+```bash
+uv run pytest                            # todos los tests
+uv run pytest chapters/ch04_linea_base_madurez  # los de un capítulo
+uv run ruff check .                      # lint
+uv run dglab --help                      # comandos del generador de datos (build, generate, load, reset)
 ```
 
 ## Estructura
 
 ```text
-src/dglab/        paquete compartido (rutas, empresa ficticia, datos sintéticos, reporting)
-data/raw/         CSV sintéticos (generados, no versionados)
+src/dglab/        paquete compartido: rutas, empresa ficticia, datos sintéticos, warehouse, reporting y gráficos
+data/raw/         CSV sintéticos y solucionario (generados, no versionados)
 data/warehouse/   base DuckDB de NovaMercado (generada, no versionada)
 chapters/chNN_*/  un microproyecto por capítulo: README, inputs/, run.py, outputs/, tests/
 docs/             referencia bibliográfica y documentación de los datos sintéticos
