@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 DATA_SPEAK = (
     "metadatos", "metadata", "linaje", "lineage", "etl", "elt", "pipeline", "mdm",
     "data lake", "lakehouse", "data warehouse", "esquema", "ingesta", "golden record",
-    "cde", "dataset", "modelo de datos", "data mesh",
+    "cde", "dataset", "modelo de datos", "data mesh", "pii",
 )
 VISION_MAX_WORDS = 40
 

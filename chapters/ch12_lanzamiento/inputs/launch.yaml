@@ -1,0 +1,46 @@
+# Lanzamiento del programa de gobierno de datos de NovaMercado.
+launch_date: 2027-01-19     # primer comité empresarial de datos (capítulo 3)
+memo_max_words: 4500        # unas 10 páginas, el máximo que recomienda el capítulo
+
+# Evaluación de preparación: las 5 dimensiones del libro se calculan con evidencia de los
+# capítulos anteriores (ver readiness.py). Aquí solo van los datos que no están en ningún otro
+# sitio.
+leadership:
+  funding_approved: true          # el comité aprobó la opción preferida del capítulo 1
+  csuite_supporters: [CMO, CFO, COO]
+
+# As-is frente a to-be en una página, en términos de negocio
+as_is_to_be:
+  - {as_is: "Cada informe da una cifra de ventas distinta y las regiones usan sus propias hojas de cálculo", to_be: "Una sola cifra de ventas certificada, con su origen documentado"}
+  - {as_is: "El mismo cliente aparece hasta tres veces y nadie sabe cuál es el bueno", to_be: "Un cliente único en todos los canales, con el origen de cada dato"}
+  - {as_is: "Nadie sabe qué tablas guardan datos personales", to_be: "Cada dato está clasificado y cualquiera encuentra en minutos lo que necesita"}
+  - {as_is: "Los errores se descubren cuando el informe ya está en el comité", to_be: "Los errores se detectan en cada carga, con un responsable para corregirlos"}
+  - {as_is: "Datos copiados a mano entre sistemas y departamentos", to_be: "Una arquitectura sencilla con puntos de provisión autorizados"}
+
+# Qué necesita saber cada audiencia
+audiences:
+  - {name: Colaboradores y mandos directos, needs: "Plan detallado, tareas y qué cambia en su día a día", format: "Sesión de formación breve y wiki del programa", cadence: quincenal}
+  - {name: Mandos intermedios y directivos, needs: "Visión agregada, hitos clave y resultados comprometidos", format: "Actualización escrita y consejo de datos", cadence: mensual}
+  - {name: Comité de dirección y consejo, needs: "Plan resumido en resultados de negocio y avance del valor", format: "Memo narrativo y comité empresarial de datos", cadence: trimestral}
+
+# Proceso repetible de comunicación
+communication:
+  - {item: Memo de estrategia (North Star), detail: "Publicado para toda la empresa y revisado al menos una vez al año", owner: CDAO}
+  - {item: Plan de entregas, detail: "Qué podrá hacer cada stakeholder en cada entrega, no solo al final", owner: Chief of Staff}
+  - {item: Actualizaciones, detail: "Distintas para el consejo y para quienes trabajan en el programa", owner: Chief of Staff}
+  - {item: Informes de estado, detail: "Abiertos a todos; también cuando las noticias son malas", owner: Líder de gobierno y estrategia}
+  - {item: Presupuesto, detail: "Seguimiento del gasto frente al caso de negocio del capítulo 1", owner: CDAO}
+  - {item: KPI y medidas de éxito, detail: "EDG Scorecard e informe de progreso publicados", owner: Líder de gobierno y estrategia}
+
+# Bucles de feedback
+feedback:
+  - {channel: Foros, detail: "Comité y consejo de datos para ejecutivos; foro abierto mensual para toda la empresa"}
+  - {channel: Encuestas, detail: "Encuesta trimestral a los usuarios de datos; los resultados se comparten, buenos o malos"}
+  - {channel: Flujo de trabajo, detail: "Formulario permanente en la wiki del programa, revisado cada semana por la oficina de datos"}
+
+# Hitos con "antes frente a ahora" para cada entrega (después del lanzamiento)
+milestones:
+  - {when: T1 2027, release: "Cifra única de ventas certificada", now_you_can: "Presentar las ventas por canal sin conciliarlas a mano"}
+  - {when: T2 2027, release: "Cliente único en todos los canales", now_you_can: "Lanzar una campaña sin enviar dos veces al mismo cliente"}
+  - {when: T3 2027, release: "Datos personales protegidos en todos los sistemas de cliente", now_you_can: "Responder a un cliente que pide sus datos en menos de 24 horas"}
+  - {when: T4 2027, release: "Retirada del cubo de Finanzas y de las hojas regionales", now_you_can: "Consultar todos los informes desde un único sitio"}

@@ -1,0 +1,87 @@
+# Plan de lanzamiento del programa de datos de {{ company }}
+
+> El lanzamiento decide el éxito del programa tanto como su ejecución. Una transformación de datos dura entre 24 y 36 meses: hay que conseguir que toda la empresa la apoye durante todo ese tiempo.
+
+## 1. ¿Estamos preparados?
+
+La preparación del negocio (no solo la madurez de los datos) en las cinco dimensiones del capítulo, calculada con la evidencia de los capítulos anteriores:
+
+![Preparación para el lanzamiento]({{ chart_name }})
+
+| Dimensión | Puntuación (1-5) | Evidencia |
+|---|---:|---|
+{% for d in dims %}
+| {{ d.left }} → {{ d.right }} | {{ d.score | num(1) }} | {{ d.evidence | join("; ") }} |
+{% endfor %}
+
+{% if approach %}
+**Cómo lanzar con este perfil** (de la dimensión más débil a la más fuerte):
+{% for a in approach %}
+- {{ a }}
+{% endfor %}
+{% else %}
+✅ Todas las dimensiones están por encima de 3,5: se puede lanzar una transformación de toda la empresa.
+{% endif %}
+
+## 2. Mensaje central
+
+**Visión:** {{ vision }}
+
+**Misión del programa:** {{ mission }}
+
+### As-is frente a to-be
+
+| Hoy | Mañana |
+|---|---|
+{% for p in as_is_to_be %}
+| {{ p.as_is }} | {{ p.to_be }} |
+{% endfor %}
+
+### La misma historia, contada a cada audiencia
+
+| Audiencia | Qué necesita | Formato | Cadencia |
+|---|---|---|---|
+{% for a in audiences %}
+| **{{ a.name }}** | {{ a.needs }} | {{ a.format }} | {{ a.cadence }} |
+{% endfor %}
+
+El documento de referencia para todas es el **memo narrativo**: [narrative_memo.md](narrative_memo.md).
+
+**Revisión del memo:** {{ review.words | num }} palabras (máximo {{ review.max_words | num }}). {% if review.jargon %}⚠️ Jerga de datos que hay que traducir: {% for term, n in review.jargon.items() %}«{{ term }}» ({{ n }}){{ ", " if not loop.last }}{% endfor %}.{% else %}✅ Sin jerga de datos: lo puede leer cualquiera.{% endif %}
+
+
+## 3. Proceso repetible de comunicación
+
+Hay que contarlo, contar lo que se ha contado y volver a contarlo.
+
+| Pieza | Qué incluye | Responsable |
+|---|---|---|
+{% for c in communication %}
+| {{ c.item }} | {{ c.detail }} | {{ c.owner }} |
+{% endfor %}
+
+## 4. Bucles de feedback
+
+| Canal | Cómo funciona |
+|---|---|
+{% for f in feedback %}
+| {{ f.channel }} | {{ f.detail }} |
+{% endfor %}
+
+## 5. Expectativas: qué podrás hacer en cada entrega
+
+| Cuándo | Entrega | Antes no podías; ahora puedes |
+|---|---|---|
+{% for m in milestones %}
+| {{ m.when }} | {{ m.release }} | {{ m.now_you_can }} |
+{% endfor %}
+
+Cada entrega va acompañada de una formación breve, de los resultados medidos y de una comparación del antes y el después.
+
+## 6. No esperar al lanzamiento: lo que ya está entregado
+
+{% for w in wins %}
+- **{{ w.text }}.** *({{ w.evidence }})*
+{% else %}
+- Todavía no hay entregas medibles en el warehouse: ejecuta los capítulos 6 a 10 antes de lanzar.
+{% endfor %}

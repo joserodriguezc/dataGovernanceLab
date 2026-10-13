@@ -35,7 +35,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 9 | Data Architecture | `uv run python -m chapters.ch09_arquitectura_datos.run` | Warehouse; para las medidas de éxito completas, pasos 6 y 8 |
 | 10 | Primary Data Management | `uv run python -m chapters.ch10_datos_primarios_mdm.run` | Warehouse |
 | 11 | Data Operations | `uv run python -m chapters.ch11_operaciones_datos.run` | `data/raw` (reconstruye el warehouse y ejecuta los pasos 10, 6, 7 y 8) |
-| 12-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 12 | Launch Powerfully | `uv run python -m chapters.ch12_lanzamiento.run` | Warehouse con los pasos 6 a 10 (o el pipeline del paso 11) |
+| 13-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -183,6 +184,17 @@ uv run python -m chapters.ch11_operaciones_datos.run --sin-pipeline   # solo el 
 - **Qué probar:** en `inputs/operations.yaml`, sube el `failure_rate` del paso `pdm` y la `retry_success` a 0 y regenera el informe con `--sin-pipeline`: caen los SLAs y aparecen más tickets de fallos de proceso.
 - [README del capítulo](chapters/ch11_operaciones_datos/README.md)
 
+### Paso 12. Lanzar con fuerza
+
+```bash
+uv run python -m chapters.ch12_lanzamiento.run
+```
+
+- **Qué produce:** la evaluación de preparación para el lanzamiento en las cinco dimensiones del libro, calculada con la evidencia de los capítulos anteriores; el mensaje central (visión, as-is frente a to-be, audiencias); el **memo narrativo** para toda la empresa, revisado para que no tenga jerga; el plan de comunicación y feedback; y las victorias ya entregadas.
+- **Qué mirar:** `outputs/narrative_memo.md` (léelo como si fueras del comité de dirección) y `outputs/launch_readiness.png`.
+- **Qué probar:** escribe un término técnico ("golden record", "linaje", "PII") en un hito de `inputs/launch.yaml` y vuelve a ejecutar: la revisión del memo lo detecta. O pon `funding_approved: false` y mira cómo baja el liderazgo y cambia el enfoque recomendado.
+- [README del capítulo](chapters/ch12_lanzamiento/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -198,6 +210,7 @@ uv run python -m chapters.ch08_calidad_datos.run
 uv run python -m chapters.ch09_arquitectura_datos.run
 uv run python -m chapters.ch10_datos_primarios_mdm.run
 uv run python -m chapters.ch11_operaciones_datos.run
+uv run python -m chapters.ch12_lanzamiento.run
 ```
 
 Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.

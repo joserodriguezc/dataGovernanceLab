@@ -1,0 +1,49 @@
+# Datos en los que podemos confiar: la estrategia de datos de {{ company }}
+
+*Memo de estrategia (North Star) · Lanzamiento: {{ launch_date.strftime("%d/%m/%Y") }} · Documento vivo, se revisa al menos una vez al año*
+
+> **{{ program.vision.statement }}**
+
+## Por qué tenemos que cambiar
+
+Hoy nuestros datos nos cuestan más de lo que nos aportan. Los problemas que generan (horas cuadrando cifras, clientes repetidos, datos personales sin proteger) pesan **{{ (-equity_now) | money }} al año más** que el valor que obtenemos de ellos.
+
+- **Lo que falta:** una sola versión de las ventas, un cliente único en todos los canales y saber dónde están los datos personales de nuestros clientes.
+- **Dónde estamos:** en la evaluación de toda la empresa obtuvimos {{ maturity | num(1) }} sobre 6. Tenemos lo básico, pero cada área trabaja a su manera.
+- **Lo que hoy no podemos hacer:** presentar las ventas en el comité sin discutir qué cifra es la buena; hablar con un cliente sabiendo todo lo que nos ha comprado; responder rápido a un cliente que pide sus datos.
+- **Lo que podremos hacer:** decidir con cifras en las que todos confían, personalizar cada campaña y proteger a nuestros clientes y a la empresa.
+
+## Qué vamos a cambiar
+
+| Para | Resultado comprometido | Valor anual |
+|---|---|---:|
+{% for o, who in outcomes %}
+| {{ who }} | {{ o.business_outcome }} | {{ outcome_value[o.id] | money }} |
+{% endfor %}
+
+- **Se mantiene:** los sistemas con los que trabajamos cada día ({{ kept | join(", ") }}).
+- **Mejora:** la información que sale de ellos, que pasa a tener responsable, origen conocido y controles en cada carga.
+- **Se retira:** {{ retired | join(", ") }}.
+
+## Cómo lo vamos a conseguir
+
+Invertiremos **{{ option.option.build_cost_usd | money }} en {{ option.option.duration_months }} meses**, con un valor neto de **{{ option.npv | money }}** en tres años. La inversión se recupera en el **mes {{ option.payback_month }}**.
+
+| Cuándo | Entrega | Lo que podrás hacer |
+|---|---|---|
+{% for m in milestones %}
+| {{ m.when }} | {{ m.release }} | {{ m.now_you_can }} |
+{% endfor %}
+
+**Lo que ya hemos entregado.** No esperamos al lanzamiento para empezar:
+{% for w in wins %}
+- {{ w.text }}.
+{% endfor %}
+
+## Quién participa
+
+- **En el comité de dirección:** {{ supporters | join(", ") }} ya apoyan esta estrategia. {{ sponsor }} es su sponsor.
+- **En cada área:** un directivo responde de sus datos y nombra a las personas que los cuidan en el día a día.
+- **No necesitan cambiar su forma de trabajar** quienes solo consultan informes: verán las mismas pantallas, con cifras en las que pueden confiar.
+
+**Lo que pedimos:** {{ bc.ask }}

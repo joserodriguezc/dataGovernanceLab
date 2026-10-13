@@ -83,7 +83,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 
 | # | Capítulo | Microproyecto | Entregables | Criterio de aceptación |
 |---|---|---|---|---|
-| 12 | Launch Powerfully | Kit de lanzamiento | Scoring de readiness, narrativa as-is vs to-be, memo narrativo generado con jinja2 a partir de los capítulos 1–5 | El memo se regenera solo cuando cambian los inputs |
+| 12 | Launch Powerfully | Kit de lanzamiento | Preparación en 5 dimensiones calculada con la evidencia de los capítulos 2-10, mensaje as-is/to-be por audiencia, memo narrativo generado desde los capítulos 1, 2, 4, 5 y 9 con revisión de jerga, comunicación, feedback, expectativas y victorias entregadas | El memo se regenera desde los inputs y no contiene jerga de datos |
 | 13 | Delivering Quick Wins with Impact | Backlog priorizado | Matriz valor/esfuerzo, clasificación corto/largo plazo, registro de data ownership, plantillas de política, estándar y procedimiento | Cada quick win está ligado a un outcome del capítulo 5 |
 | 14 | Data Automation | Automatizar un proceso manual | El proceso manual y su versión automatizada, enriquecimiento de terceros simulado, ROI antes y después (6 pasos) | El ROI se calcula con tiempos medidos, no supuestos |
 | 15 | Adoption That Drives Business Success | Métricas de adopción | Logs de uso sintéticos → KPIs (usuarios activos, retención, cobertura), coste de la baja adopción, roadmap | Los KPIs se calculan por segmento y el roadmap ataca las barreras detectadas |
@@ -135,7 +135,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 9: Arquitectura | ✅ hecho |
 | Cap. 10: Golden record | ✅ hecho |
 | Cap. 11: Operaciones | ✅ hecho |
-| Cap. 12: Kit de lanzamiento | ⬜ pendiente |
+| Cap. 12: Kit de lanzamiento | ✅ hecho |
 | Cap. 13: Quick wins | ⬜ pendiente |
 | Cap. 14: Automatización | ⬜ pendiente |
 | Cap. 15: Adopción | ⬜ pendiente |
