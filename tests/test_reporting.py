@@ -10,3 +10,8 @@ def test_fmt_money_uses_lab_currency_and_spanish_separators():
 def test_fmt_num_and_pct():
     assert fmt_num(2582500) == "2.582.500"
     assert fmt_pct(0.425, decimals=1) == "42,5 %"
+
+
+def test_fmt_pct_never_shows_negative_zero():
+    assert fmt_pct(-0.0) == "0 %"
+    assert fmt_pct(-0.001) == "0 %"

@@ -21,6 +21,8 @@ def fmt_money(value: float, decimals: int = 0) -> str:
 
 def fmt_pct(value: float, decimals: int = 0) -> str:
     """Formatea una proporción como porcentaje: 0.425 -> '42,5 %' (con decimals=1)."""
+    if round(value * 100, decimals) == 0:
+        value = 0.0  # evita '-0 %'
     return f"{value * 100:.{decimals}f}".replace(".", ",") + " %"
 
 
