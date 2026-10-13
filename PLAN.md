@@ -63,7 +63,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 |---|---|---|---|---|
 | 1 | What Is Data Governance? | Charter del programa y caso de negocio | Data equity (activos − pasivos); caso de negocio con 3 opciones de timeline (VAN, ROI, payback); charter con why statement, misiones y decisión de lanzar o esperar; política de 10 secciones; EDG Scorecard | Solo cuentan los beneficios validados por el negocio; la política tiene las 10 secciones; el scorecard se deriva del estado de cada dominio |
 | 2 | How to Build a Coalition of Advocates | Mapa de stakeholders y sponsor | Registro de stakeholders con escucha en 5 direcciones, mapa objetivos → soluciones → resultados, matriz influencia/interés, scoring de sponsors con caso de negocio por tracks, señales del comité y plan de comunicación | El CIO nunca es sponsor; se detectan las *vanity metrics*; las señales del comité salen del registro de reuniones |
-| 3 | Building a High-Performing Team | Diseño organizativo | Selector de modelo (oficina del CDO / hub & spoke / centralizado), RACI, catálogo de roles, calendario del comité y del consejo | Cada actividad de la RACI tiene exactamente un *Accountable* |
+| 3 | Building a High-Performing Team | Diseño organizativo | Resultados priorizados, selector de modelo por reglas (federado / hub and spoke / centralizado), organigrama y plan de contratación, roles por dominio, RACI, cartas y calendario de foros, portfolio, IA y brechas de habilidades | Cada actividad de la RACI tiene exactamente un *Accountable*; el coste del equipo se contrasta con el caso de negocio del capítulo 1 |
 | 4 | Baseline Your Organization | Evaluación de madurez | Cuestionario por dimensiones con niveles 1–5, respuestas sintéticas por área, radar y reporte agregado y desagregado | Se cubren los 10 pasos del libro y el reporte prioriza los gaps |
 
 ### Parte 2: Las capacidades de gobierno de datos en profundidad
@@ -125,7 +125,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Fase 0: datos sintéticos y warehouse | ⬜ pendiente |
 | Cap. 1: Charter y caso de negocio | ✅ hecho |
 | Cap. 2: Stakeholders y sponsor | ✅ hecho |
-| Cap. 3: Diseño organizativo | ⬜ pendiente |
+| Cap. 3: Diseño organizativo | ✅ hecho |
 | Cap. 4: Evaluación de madurez | ⬜ pendiente |
 | Cap. 5: Árbol de outcomes | ⬜ pendiente |
 | Cap. 6: Glosario y catálogo | ⬜ pendiente |
