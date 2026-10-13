@@ -74,7 +74,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 | 5 | Defining Success and Aligning on Outcomes | Árbol de resultados | Marco resultado → capacidades → entregables → resultados de datos con los 8 pasos; valor desde la data equity del capítulo 1; informe de progreso, roadmap, barreras y QBR sobre el mapa del capítulo 2 | La validación falla con estructura rota o métricas sin responsable; los resultados de datos se miden en el warehouse |
 | 6 | Metadata Management | Glosario y catálogo | Glosario de negocio, catálogo extraído de DuckDB, clasificación de PII por nombre y contenido, estándar de metadatos por dominio, publicación en el warehouse (comentarios y esquema `meta`) y CLI de búsqueda | El 100 % de las tablas curated queda documentado y clasificado; el avance se mide en los capítulos 4 y 5 |
 | 7 | Technical Metadata and Data Lineage | Linaje a nivel de columna | SQL del warehouse → grafo de columnas (sqlglot + networkx) con filtros y claves de unión, análisis de impacto, validación de la narrativa del responsable, hallazgos, madurez y ROI; publicación en `meta.lineage_edges` | Dada una columna raw se listan todas sus dependientes, incluidas las que dependen de ella por un filtro |
-| 8 | Data Quality | Calidad y certificación | Profiling, validación con pandera por dimensión, scorecard, log de incidencias, marca de certificado en el catálogo | Se detectan todos los defectos sembrados; solo se certifica lo que supera el umbral |
+| 8 | Data Quality | Calidad y certificación | Perfilado por forma, 17 reglas con pandera por dimensión y severidad, scorecard, incidencias y disposiciones, certificación apoyada en linaje, documentación y steward, detección frente al solucionario y valor | Se detecta el 100 % de los defectos sembrados; solo se certifica lo que cumple, incluidas sus fuentes |
 | 9 | Data Architecture | Principios y linter | Diagramas as-is / to-be (Mermaid), principios de diseño, `arch_lint.py` sobre el esquema DuckDB | El linter detecta las violaciones de nomenclatura, claves y capas |
 | 10 | Primary Data Management | Golden record de cliente | Matching difuso (rapidfuzz), reglas de supervivencia y trust logic, jerarquía de hogares, datos de referencia | Se resuelve como mínimo el 90 % de los duplicados sembrados, con trazabilidad al origen |
 | 11 | Data Operations | Operaciones con SLAs | Mini orquestador de los pipelines de los capítulos 6–10, log de ejecuciones, SLAs, registro de incidentes y dashboard | Se detectan y registran las violaciones de SLA |
@@ -131,7 +131,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 5: Árbol de resultados | ✅ hecho |
 | Cap. 6: Glosario y catálogo | ✅ hecho |
 | Cap. 7: Linaje | ✅ hecho |
-| Cap. 8: Calidad y certificación | ⬜ pendiente |
+| Cap. 8: Calidad y certificación | ✅ hecho |
 | Cap. 9: Arquitectura | ⬜ pendiente |
 | Cap. 10: Golden record | ⬜ pendiente |
 | Cap. 11: Operaciones | ⬜ pendiente |
