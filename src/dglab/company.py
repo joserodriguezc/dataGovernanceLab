@@ -14,6 +14,16 @@ DATA_DOMAINS: dict[str, str] = {
     "finance": "Finanzas",
 }
 
+# Nombre en español de cada dominio, para los informes
+DOMAIN_NAMES: dict[str, str] = {
+    "customer": "Cliente",
+    "product": "Producto",
+    "supplier": "Proveedor",
+    "sales": "Ventas",
+    "store": "Tiendas",
+    "finance": "Finanzas",
+}
+
 # Sistemas de origen simulados
 SOURCE_SYSTEMS: dict[str, str] = {
     "pos": "Punto de venta de tiendas",

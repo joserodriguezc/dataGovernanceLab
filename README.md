@@ -18,7 +18,7 @@ uv sync
 
 ```bash
 # Ejecutar el microproyecto de un capítulo
-uv run python chapters/ch01_que_es_gobierno_datos/run.py
+uv run python -m chapters.ch01_que_es_gobierno_datos.run
 
 # Tests (todos o los de un capítulo)
 uv run pytest
@@ -30,7 +30,7 @@ uv run ruff check .
 
 ## Estructura
 
-```
+```text
 src/dglab/        paquete compartido (rutas, empresa ficticia, datos sintéticos, reporting)
 data/raw/         CSV sintéticos (generados, no versionados)
 data/warehouse/   base DuckDB de NovaMercado (generada, no versionada)

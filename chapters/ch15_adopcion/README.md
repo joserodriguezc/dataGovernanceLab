@@ -6,9 +6,11 @@
 **Estado:** pendiente
 
 ## Objetivo
+
 Medir la adopción de las capacidades de datos, cuantificar el coste de la baja adopción y diseñar el roadmap.
 
 ## Conceptos del libro que se aplican
+
 - Empezar por el porqué, facilitar el uso, la cultura y las barreras
 - Costes cuantitativos y cualitativos de la baja adopción
 - Por qué falla la adopción: la solución, la empresa o tú
@@ -16,20 +18,24 @@ Medir la adopción de las capacidades de datos, cuantificar el coste de la baja 
 - Post-despliegue: roadmap, monitorización y adopción en el SDLC
 
 ## Entregables
+
 - Logs de uso sintéticos del catálogo y del marketplace
 - KPIs de adopción (usuarios activos, retención, cobertura)
 - `outputs/adoption_report.md` con el coste de la baja adopción y el roadmap
 
 ## Dependencias
+
 Fase 0 (datos sintéticos), Capítulo 6.
 
 ## Cómo ejecutarlo
+
 ```bash
-uv run python chapters/ch15_adopcion/run.py
+uv run python -m chapters.ch15_adopcion.run
 uv run pytest chapters/ch15_adopcion
 ```
 
 ## Definición de hecho
+
 - [ ] `run.py` genera todos los entregables en `outputs/`
 - [ ] Tests en verde
 - [ ] Este README documenta las decisiones y las conclusiones

@@ -6,9 +6,11 @@
 **Estado:** pendiente
 
 ## Objetivo
+
 Encontrar, racionalizar y priorizar las victorias rápidas y mantener el impulso con mentalidad de producto.
 
 ## Conceptos del libro que se aplican
+
 - Identificar, racionalizar y priorizar la lista
 - Corto vs largo plazo, preparación organizativa y modelos de financiación
 - Políticas, estándares y procedimientos que generan interés
@@ -16,20 +18,24 @@ Encontrar, racionalizar y priorizar las victorias rápidas y mantener el impulso
 - Mentalidad de producto y modelo de entrega continua
 
 ## Entregables
+
 - `inputs/backlog.yaml` y matriz valor/esfuerzo
 - `outputs/data_ownership_register.csv`
 - Plantillas de política, estándar y procedimiento en `outputs/`
 
 ## Dependencias
+
 Capítulo 4, Capítulo 5.
 
 ## Cómo ejecutarlo
+
 ```bash
-uv run python chapters/ch13_quick_wins/run.py
+uv run python -m chapters.ch13_quick_wins.run
 uv run pytest chapters/ch13_quick_wins
 ```
 
 ## Definición de hecho
+
 - [ ] `run.py` genera todos los entregables en `outputs/`
 - [ ] Tests en verde
 - [ ] Este README documenta las decisiones y las conclusiones

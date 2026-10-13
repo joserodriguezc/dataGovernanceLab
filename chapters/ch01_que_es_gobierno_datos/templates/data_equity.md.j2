@@ -1,0 +1,35 @@
+# Data equity de {{ company }}
+
+> **Data equity = activos de datos − pasivos de datos.** Cifras anuales en euros, con una hora valorada en {{ hourly_rate | eur }}.
+
+La pregunta que guía cada solución: *¿aumenta el valor de nuestros datos (activo) o reduce su riesgo (pasivo)?*
+
+## Resumen
+
+| | Situación actual | Objetivo | Mejora anual |
+|---|---:|---:|---:|
+| Activos de datos | {{ s.assets("current") | eur }} | {{ s.assets("target") | eur }} | {{ (s.assets("target") - s.assets("current")) | eur }} |
+| Pasivos de datos | {{ s.liabilities("current") | eur }} | {{ s.liabilities("target") | eur }} | {{ (s.liabilities("current") - s.liabilities("target")) | eur }} |
+| **Data equity** | **{{ s.equity("current") | eur }}** | **{{ s.equity("target") | eur }}** | **{{ s.annual_benefit() | eur }}** |
+| **Data equity validada por el negocio** | {{ s.equity("current", True) | eur }} | {{ s.equity("target", True) | eur }} | **{{ s.annual_benefit(True) | eur }}** |
+
+{% if s.unvetted %}
+**Pendiente de validar con el negocio** (no se incluye en el caso de negocio conservador):
+{% for ln in s.unvetted %}
+- {{ ln.id }}: {{ ln.name }} (mejora estimada de {{ ln.benefit | eur }}/año)
+{% endfor %}
+
+Presentar una valoración que el negocio no ha validado resta credibilidad. Antes de contarla, hay que repasarla con su responsable hasta que estéis de acuerdo.
+{% endif %}
+
+## Detalle por línea
+
+| Id | Línea | Tipo | Dominio | Validado por | Actual | Objetivo | Mejora |
+|---|---|---|---|---|---:|---:|---:|
+{% for ln in s.lines %}
+| {{ ln.id }} | {{ ln.name }} | {{ "Activo" if ln.kind == "asset" else "Pasivo" }} | {{ domain_names[ln.domain] }} | {{ ln.vetted_by or "⚠️ pendiente" }} | {{ ln.current | eur }} | {{ ln.target | eur }} | {{ ln.benefit | eur }} |
+{% endfor %}
+
+**Cómo se valora cada línea:**
+- **Activo:** ingresos + horas ahorradas × coste/hora + valor de cliente (gasto adicional o retención).
+- **Pasivo:** probabilidad de multa × importe + horas perdidas × coste/hora + impacto en el cliente.
