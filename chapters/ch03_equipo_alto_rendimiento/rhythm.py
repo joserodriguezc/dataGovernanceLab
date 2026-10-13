@@ -1,10 +1,11 @@
 """Ritmo del negocio de datos: cartas de los foros, calendario e inventario del portfolio."""
 
-import calendar
 from datetime import date, timedelta
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
+
+from dglab.dates import add_months
 
 
 class Every(BaseModel):
@@ -77,13 +78,6 @@ class ForumsInput(BaseModel):
                 seen.add(node)
                 node = parents[node]
         return self
-
-
-def add_months(d: date, months: int) -> date:
-    """Suma meses manteniendo el día cuando existe (31/01 + 1 mes = 28/02 o 29/02)."""
-    month_index = d.month - 1 + months
-    year, month = d.year + month_index // 12, month_index % 12 + 1
-    return date(year, month, min(d.day, calendar.monthrange(year, month)[1]))
 
 
 def meeting_dates(forum: Forum, start: date, end: date) -> list[date]:

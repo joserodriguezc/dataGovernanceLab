@@ -33,7 +33,11 @@ def template_env(template_dir: Path) -> Environment:
         lstrip_blocks=True,
         keep_trailing_newline=True,
     )
-    env.filters.update(money=fmt_money, pct=fmt_pct, num=fmt_num)
+    env.filters.update(
+        money=fmt_money, pct=fmt_pct, num=fmt_num,
+        # Traduce claves con un diccionario: {{ ids | map("extract", names) | join(", ") }}
+        extract=lambda key, mapping: mapping[key],
+    )
     return env
 
 
