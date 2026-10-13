@@ -32,7 +32,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 6 | Metadata Management | `uv run python -m chapters.ch06_gestion_metadatos.run` | Warehouse e inputs del cap. 3 |
 | 7 | Technical Metadata and Data Lineage | `uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run` | Warehouse; recomendable haber ejecutado el paso 6 |
 | 8 | Data Quality | `uv run python -m chapters.ch08_calidad_datos.run` | Warehouse; para certificar, pasos 6 y 7 |
-| 9-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 9 | Data Architecture | `uv run python -m chapters.ch09_arquitectura_datos.run` | Warehouse; para las medidas de éxito completas, pasos 6 y 8 |
+| 10-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -143,6 +144,18 @@ uv run python -m chapters.ch06_gestion_metadatos.marketplace "tienda" --solo-cer
 - **Recuerda:** ejecútalo después de los pasos 6 y 7, porque la certificación exige documentación, steward y linaje.
 - [README del capítulo](chapters/ch08_calidad_datos/README.md)
 
+### Paso 9. Arquitectura de datos
+
+```bash
+uv run python -m chapters.ch09_arquitectura_datos.run
+uv run python -m chapters.ch09_arquitectura_datos.review chapters/ch09_arquitectura_datos/inputs/proposals/20_curated_customer_report.sql
+```
+
+- **Qué produce:** as-is y to-be de la arquitectura (diagramas Mermaid), principios de diseño, el cumplimiento de 10 estándares arquitectónicos sobre el warehouse, la revisión automática de cada SQL (puerta del SDLC), el programa de arquitectura, el roadmap por fases y las medidas de éxito.
+- **Qué mirar:** `outputs/data_architecture.md`, sobre todo la comparación as-is/to-be y los incumplimientos (importes en coma flotante, PII repetida en varias tablas). Después ejecuta `review` con la propuesta de ejemplo, que se rechaza con 5 incumplimientos.
+- **Qué probar:** corrige la propuesta en `inputs/proposals/` (renómbrala a `curated.dim_customer_sales`, lee de staging, quita el `SELECT *` y los datos personales) hasta que `review` la apruebe. También puedes cambiar un `CAST(... AS DOUBLE)` por `DECIMAL(18,2)` en el SQL del warehouse, reconstruirlo y ver cómo baja ARQ-06.
+- [README del capítulo](chapters/ch09_arquitectura_datos/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -155,6 +168,7 @@ uv run python -m chapters.ch05_exito_y_resultados.run
 uv run python -m chapters.ch06_gestion_metadatos.run
 uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run
 uv run python -m chapters.ch08_calidad_datos.run
+uv run python -m chapters.ch09_arquitectura_datos.run
 ```
 
 Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de documentar el warehouse y de calcular el linaje. Para ver el avance, vuelve a ejecutar 4 y 5 al final.

@@ -75,7 +75,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 | 6 | Metadata Management | Glosario y catálogo | Glosario de negocio, catálogo extraído de DuckDB, clasificación de PII por nombre y contenido, estándar de metadatos por dominio, publicación en el warehouse (comentarios y esquema `meta`) y CLI de búsqueda | El 100 % de las tablas curated queda documentado y clasificado; el avance se mide en los capítulos 4 y 5 |
 | 7 | Technical Metadata and Data Lineage | Linaje a nivel de columna | SQL del warehouse → grafo de columnas (sqlglot + networkx) con filtros y claves de unión, análisis de impacto, validación de la narrativa del responsable, hallazgos, madurez y ROI; publicación en `meta.lineage_edges` | Dada una columna raw se listan todas sus dependientes, incluidas las que dependen de ella por un filtro |
 | 8 | Data Quality | Calidad y certificación | Perfilado por forma, 17 reglas con pandera por dimensión y severidad, scorecard, incidencias y disposiciones, certificación apoyada en linaje, documentación y steward, detección frente al solucionario y valor | Se detecta el 100 % de los defectos sembrados; solo se certifica lo que cumple, incluidas sus fuentes |
-| 9 | Data Architecture | Principios y linter | Diagramas as-is / to-be (Mermaid), principios de diseño, `arch_lint.py` sobre el esquema DuckDB | El linter detecta las violaciones de nomenclatura, claves y capas |
+| 9 | Data Architecture | Principios y linter | As-is / to-be (Mermaid) con almacenes y flujos, principios, 10 estándares comprobados sobre el warehouse y sobre el SQL, revisión SDLC por CLI, programa, roadmap y medidas de éxito | El linter detecta nomenclatura, capas, tipos, claves, documentación y PII; la propuesta de ejemplo se rechaza |
 | 10 | Primary Data Management | Golden record de cliente | Matching difuso (rapidfuzz), reglas de supervivencia y trust logic, jerarquía de hogares, datos de referencia | Se resuelve como mínimo el 90 % de los duplicados sembrados, con trazabilidad al origen |
 | 11 | Data Operations | Operaciones con SLAs | Mini orquestador de los pipelines de los capítulos 6–10, log de ejecuciones, SLAs, registro de incidentes y dashboard | Se detectan y registran las violaciones de SLA |
 
@@ -132,7 +132,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 6: Glosario y catálogo | ✅ hecho |
 | Cap. 7: Linaje | ✅ hecho |
 | Cap. 8: Calidad y certificación | ✅ hecho |
-| Cap. 9: Arquitectura | ⬜ pendiente |
+| Cap. 9: Arquitectura | ✅ hecho |
 | Cap. 10: Golden record | ⬜ pendiente |
 | Cap. 11: Operaciones | ⬜ pendiente |
 | Cap. 12: Kit de lanzamiento | ⬜ pendiente |
