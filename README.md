@@ -30,7 +30,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 4 | Baseline Your Organization | `uv run python -m chapters.ch04_linea_base_madurez.run` | Warehouse e inputs del cap. 3 |
 | 5 | Defining Success and Aligning on Outcomes | `uv run python -m chapters.ch05_exito_y_resultados.run` | Warehouse e inputs de los caps. 1 y 2 |
 | 6 | Metadata Management | `uv run python -m chapters.ch06_gestion_metadatos.run` | Warehouse e inputs del cap. 3 |
-| 7-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 7 | Technical Metadata and Data Lineage | `uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run` | Warehouse; recomendable haber ejecutado el paso 6 |
+| 8-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -114,6 +115,20 @@ uv run python -m chapters.ch06_gestion_metadatos.marketplace "cifra de ventas"
 - **Recuerda:** después de cada `uv run dglab build` hay que volver a ejecutar este paso.
 - [README del capítulo](chapters/ch06_gestion_metadatos/README.md)
 
+### Paso 7. Metadatos técnicos y linaje de datos
+
+```bash
+uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run
+uv run python -m chapters.ch07_metadatos_tecnicos_linaje.impact raw.ecom_orders.status
+uv run python -m chapters.ch07_metadatos_tecnicos_linaje.impact curated.agg_sales_daily_channel.revenue --origen
+```
+
+- **Qué produce:** el linaje a nivel de columna, extraído del SQL del warehouse, desde el sistema de origen hasta el KPI. Incluye el análisis de impacto, la validación de la narrativa de quien produce la venta neta y los hallazgos (qué fuentes llegan a curated y si llega PII). **Escribe en el warehouse** las tablas `meta.lineage_edges` y `meta.lineage_steps`.
+- **Qué mirar:** `outputs/lineage_validation.md`, donde el responsable cree que la venta sale del ERP y no es así, y el diagrama de `outputs/data_lineage.md`.
+- **Qué probar:** usa el comando `impact` con otras columnas. Después edita un SQL de [src/dglab/warehouse/sql/](src/dglab/warehouse/sql/) (por ejemplo, quita el filtro de cancelados en `11_curated_sales.sql`), ejecuta `uv run dglab build` y repite los pasos 6 y 7: el linaje y la validación cambian solos.
+- **Recuerda:** como el paso 6, después de cada `uv run dglab build` hay que volver a ejecutarlo. Ejecútalo después del paso 6 para que el cruce con la PII funcione.
+- [README del capítulo](chapters/ch07_metadatos_tecnicos_linaje/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -124,9 +139,10 @@ uv run python -m chapters.ch03_equipo_alto_rendimiento.run
 uv run python -m chapters.ch04_linea_base_madurez.run
 uv run python -m chapters.ch05_exito_y_resultados.run
 uv run python -m chapters.ch06_gestion_metadatos.run
+uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run
 ```
 
-Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de documentar el warehouse. Para ver el avance, vuelve a ejecutar 4 y 5 al final.
+Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de documentar el warehouse y de calcular el linaje. Para ver el avance, vuelve a ejecutar 4 y 5 al final.
 
 ## Comandos útiles
 
