@@ -38,7 +38,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 12 | Launch Powerfully | `uv run python -m chapters.ch12_lanzamiento.run` | Warehouse con los pasos 6 a 10 (o el pipeline del paso 11) |
 | 13 | Delivering Quick Wins with Impact | `uv run python -m chapters.ch13_quick_wins.run` | Warehouse; para medir los problemas, pasos 6 a 10 |
 | 14 | Data Automation | `uv run python -m chapters.ch14_automatizacion.run` | Warehouse con el paso 10 (o el pipeline del paso 11) |
-| 15-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 15 | Adoption That Drives Business Success | `uv run python -m chapters.ch15_adopcion.run` | — (logs de uso simulados) |
+| 16-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -219,6 +220,17 @@ uv run python -m chapters.ch14_automatizacion.run
 - **Qué probar:** en `inputs/automation.yaml`, baja `z_threshold` a 1 y verás cómo se disparan las alertas de volumen: demasiadas alertas acaban ignoradas. O cambia la `accuracy` de un proveedor y mira cómo cambia la recomendación.
 - [README del capítulo](chapters/ch14_automatizacion/README.md)
 
+### Paso 15. Adopción que impulsa el negocio
+
+```bash
+uv run python -m chapters.ch15_adopcion.run
+```
+
+- **Qué produce:** KPI de adopción de cuatro soluciones de datos a partir de logs de uso simulados (usuarios activos, adopción frente a usuarios objetivo, retención y departamentos), el coste de la baja adopción, el diagnóstico de por qué falla una adopción (la solución, la empresa o el líder) con su plan de recuperación, y la hoja de ruta de adopción tras la salida en vivo.
+- **Qué mirar:** `outputs/adoption.md`, sobre todo el lanzamiento fallido de la plataforma de visualización (solo la usa el equipo de datos) y lo que cuesta al año.
+- **Qué probar:** en `inputs/adoption.yaml`, mejora la encuesta de la plataforma de visualización y sube su `share` para simular el relanzamiento: cambian el diagnóstico y el coste.
+- [README del capítulo](chapters/ch15_adopcion/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -237,6 +249,7 @@ uv run python -m chapters.ch11_operaciones_datos.run
 uv run python -m chapters.ch12_lanzamiento.run
 uv run python -m chapters.ch13_quick_wins.run
 uv run python -m chapters.ch14_automatizacion.run
+uv run python -m chapters.ch15_adopcion.run
 ```
 
 Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.

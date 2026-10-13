@@ -1,0 +1,76 @@
+# Adopción de las soluciones de datos de {{ company }} ({{ as_of.strftime("%d/%m/%Y") }})
+
+> La salida en vivo no es la meta, es el principio. El retorno de la inversión solo llega si las soluciones se usan, y la adopción se trabaja hasta que la solución se retira.
+
+## KPI de adopción
+
+![Usuarios activos al mes]({{ chart_name }})
+
+| Solución | Usuarios objetivo | Activos el último mes | Adopción | Retención mensual | Departamentos con uso | Estado |
+|---|---:|---:|---:|---:|---:|---|
+{% for k in kpis %}
+| {{ k.s.name }} | {{ k.s.target_users }} | {{ k.active }} | {{ k.rate | pct }} | {{ k.retention | pct }} | {{ k.depts_used }} de {{ k.s.target | length }} | {{ "✅ Adoptada" if k.ok else "❌ Baja adopción" }} |
+{% endfor %}
+
+Objetivos: adopción ≥ {{ targets.adoption_rate | pct }} y retención ≥ {{ targets.retention | pct }}.
+
+### Adopción por departamento (último mes)
+
+| Solución | {% for d in departments %}{{ d }} | {% endfor %}
+
+|---|{% for _ in departments %}---:|{% endfor %}
+
+{% for k in kpis %}
+| {{ k.s.name }} | {% for d in departments %}{{ (k.by_dept[d] | pct) if d in k.by_dept else "—" }} | {% endfor %}
+
+{% endfor %}
+
+## La baja adopción es cara
+
+| Solución | Inversión anual sin aprovechar | Horas al año con el método anterior | Coste del esfuerzo duplicado | **Coste total** |
+|---|---:|---:|---:|---:|
+{% for k in kpis %}
+| {{ k.s.name }} | {{ k.cost.unused_investment | money }} | {{ k.cost.duplicated_hours | num }} h ({{ k.s.old_way.name | lower }}) | {{ k.cost.duplicated_effort | money }} | **{{ k.cost.total | money }}** |
+{% endfor %}
+| **Total** | | | | **{{ total_cost | money }}** |
+
+Inversión sin aprovechar = (construcción ÷ 3 años + operación anual) × parte de los usuarios objetivo que no la usa. A esto se suman los costes cualitativos: frustración, resistencia a la siguiente solución y, sobre todo, pérdida de confianza en los datos, que es lo más difícil de recuperar.
+
+## ¿Por qué falla? Diagnóstico
+
+{% for k in kpis if not k.ok %}
+### {{ k.s.name }}
+
+{% for d in k.diagnosis %}
+**{{ d.label }} es parte del problema:**
+{% for key, name, score in d.weak %}
+- {{ name }}: {{ score | num(1) }} sobre 5 → {{ actions[key] }}
+{% endfor %}
+{% endfor %}
+{% if not k.diagnosis %}
+La encuesta no señala ninguna causa por debajo de {{ targets.weak_score | num(1) }}: hay que entrevistar a quienes la abandonaron.
+{% endif %}
+
+**Plan de recuperación:** buscar la causa raíz con los stakeholders (¿problema mal diagnosticado, solución parcial, recursos mal asignados?), pedirles que colaboren en el relanzamiento, nombrar campeones de datos en cada departamento y empezar por un piloto con un solo grupo.
+
+{% endfor %}
+{% for k in kpis if k.ok %}
+- **{{ k.s.name }}:** adoptada. Siguiente paso: ampliarla a los departamentos con menos uso y medir su valor.
+{% endfor %}
+
+## Hoja de ruta de adopción
+
+| Salida en vivo | Solución | Grupo | Usuarios | Hipercuidado | Valor esperado al año |
+|---|---|---|---:|---|---:|
+{% for r in roadmap %}
+| {{ r.go_live.strftime("%d/%m/%Y") }} | {{ names[r.solution] }} | {{ r.group }} | {{ r.users }} | {{ r.hypercare_weeks }} semanas | {{ r.value | money }} ({{ r.hours | num }} h) |
+{% endfor %}
+
+Valor esperado = usuarios × horas al mes que deja de costar el método anterior × 12 × {{ cost_per_hour | money }}/h. Tras cada salida en vivo se mide: horas ahorradas, dólares ahorrados, mejora de la calidad del dato y experiencia de los usuarios.
+
+## Adopción dentro del ciclo de desarrollo (SDLC)
+
+- **Desde el principio:** los usuarios de datos participan en los requisitos y se evalúa la calidad de los datos antes de construir.
+- **Gobierno y calidad desde el diseño:** estándares y revisión de arquitectura (capítulo 9) y reglas de calidad (capítulo 8) en cada entrega.
+- **Comunicación y equipos mixtos:** desarrolladores, equipo de datos y negocio juntos durante todo el ciclo.
+- **Medir y repetir:** uso, satisfacción e impacto de cada solución, con feedback continuo.

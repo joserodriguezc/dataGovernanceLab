@@ -1,0 +1,74 @@
+# Adopción de las soluciones de datos de NovaMercado.
+as_of: 2026-12-31
+months: 6                 # meses de uso simulados hasta as_of
+seed: 42
+cost_per_hour: 45
+
+# Departamentos y su plantilla potencial de usuarios
+departments:
+  Marketing: 25
+  Ventas: 40
+  Finanzas: 15
+  Tiendas: 60
+  Compras: 10
+  Datos: 12
+
+# Soluciones desplegadas. target: usuarios objetivo por departamento.
+# Simulación del uso: share = parte de los usuarios objetivo que la adopta; monthly_active =
+# probabilidad de que un adoptante la use en un mes; churn = probabilidad mensual de
+# abandonarla; data_team_share y data_team_churn = adopción y abandono distintos en el
+# equipo de datos.
+solutions:
+  - id: marketplace
+    name: Catálogo y marketplace de datos (cap. 6)
+    go_live: 2026-07-01
+    build_cost: 180000
+    annual_run_cost: 30000
+    target: {Marketing: 20, Ventas: 25, Finanzas: 10, Tiendas: 10, Compras: 5, Datos: 12}
+    simulation: {share: 0.75, monthly_active: 0.85, churn: 0.03}
+    old_way: {name: Preguntar al equipo de datos dónde está cada dato, hours_per_user_month: 3}
+  - id: customer360
+    name: Cliente único y su buscador (cap. 10)
+    go_live: 2026-07-01
+    build_cost: 350000
+    annual_run_cost: 60000
+    target: {Marketing: 20, Ventas: 30, Tiendas: 40}
+    simulation: {share: 0.7, monthly_active: 0.9, churn: 0.04}
+    old_way: {name: Buscar al cliente en tres sistemas, hours_per_user_month: 4}
+  - id: viz
+    name: Plataforma de visualización corporativa
+    go_live: 2026-07-01
+    build_cost: 400000
+    annual_run_cost: 120000
+    target: {Marketing: 15, Ventas: 30, Finanzas: 15, Tiendas: 20, Datos: 12}
+    simulation: {share: 0.25, monthly_active: 0.6, churn: 0.2, data_team_share: 0.9, data_team_churn: 0.0}
+    old_way: {name: Hojas de cálculo construidas a mano, hours_per_user_month: 6}
+  - id: weekly_report
+    name: Informe semanal de ventas por región (cap. 14)
+    go_live: 2026-10-01
+    build_cost: 7200
+    annual_run_cost: 3600
+    target: {Ventas: 15, Finanzas: 5}
+    simulation: {share: 0.9, monthly_active: 0.95, churn: 0.02, ramp_months: 1}
+    old_way: {name: Montar el informe a mano, hours_per_user_month: 1.5}
+
+# Encuesta a usuarios y no usuarios (1-5) por solución: las preguntas cubren las tres causas
+# de fallo del capítulo (la solución, la empresa y el líder)
+survey:
+  marketplace: {usability: 4.1, relevance: 4.3, data_trust: 3.9, workflow_fit: 3.8, leadership_use: 3.5, training: 3.6, change_comms: 3.7, leader_listens: 4.0}
+  customer360: {usability: 3.9, relevance: 4.6, data_trust: 4.2, workflow_fit: 3.5, leadership_use: 4.0, training: 3.4, change_comms: 3.6, leader_listens: 4.2}
+  viz: {usability: 2.4, relevance: 2.9, data_trust: 2.7, workflow_fit: 2.1, leadership_use: 1.8, training: 2.2, change_comms: 2.6, leader_listens: 2.9}
+  weekly_report: {usability: 4.5, relevance: 4.7, data_trust: 4.6, workflow_fit: 4.4, leadership_use: 4.1, training: 3.9, change_comms: 4.0, leader_listens: 4.3}
+
+# Umbrales
+targets:
+  adoption_rate: 0.6     # usuarios activos / usuarios objetivo
+  retention: 0.7         # activos un mes que siguen activos el siguiente
+  weak_score: 3.0        # una dimensión de la encuesta por debajo de esto es una causa
+
+# Hoja de ruta de adopción (onboarding por grupo, con hipercuidado tras cada salida en vivo)
+roadmap:
+  - {solution: customer360, group: Atención al cliente, go_live: 2027-02-01, hypercare_weeks: 4, users: 25}
+  - {solution: marketplace, group: Compras, go_live: 2027-01-15, hypercare_weeks: 2, users: 5}
+  - {solution: weekly_report, group: Directores regionales, go_live: 2027-01-08, hypercare_weeks: 2, users: 5}
+  - {solution: viz, group: Finanzas (piloto de relanzamiento), go_live: 2027-03-01, hypercare_weeks: 6, users: 8}
