@@ -9,6 +9,9 @@ RAW_DIR = DATA_DIR / "raw"
 TRUTH_DIR = RAW_DIR / "_truth"  # solucionario de los datos sintéticos (solo para evaluar)
 WAREHOUSE_DIR = DATA_DIR / "warehouse"
 WAREHOUSE_DB = WAREHOUSE_DIR / "novamercado.duckdb"
+# Registro de operaciones (ejecuciones, auditoría): fuera del warehouse para que no se
+# pierda al reconstruirlo
+OPS_DB = WAREHOUSE_DIR / "operations.duckdb"
 CHAPTERS_DIR = ROOT / "chapters"
 
 

@@ -34,7 +34,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 8 | Data Quality | `uv run python -m chapters.ch08_calidad_datos.run` | Warehouse; para certificar, pasos 6 y 7 |
 | 9 | Data Architecture | `uv run python -m chapters.ch09_arquitectura_datos.run` | Warehouse; para las medidas de éxito completas, pasos 6 y 8 |
 | 10 | Primary Data Management | `uv run python -m chapters.ch10_datos_primarios_mdm.run` | Warehouse |
-| 11-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 11 | Data Operations | `uv run python -m chapters.ch11_operaciones_datos.run` | `data/raw` (reconstruye el warehouse y ejecuta los pasos 10, 6, 7 y 8) |
+| 12-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -170,6 +171,18 @@ uv run python -m chapters.ch10_datos_primarios_mdm.lookup "telmo anton"
 - **Después:** vuelve a ejecutar los pasos 4 y 5. El resultado "Duplicados de cliente por debajo del 0,5 %" pasa a estar logrado. Ejecuta también los pasos 6 y 7 para que `dim_customer` quede con steward y linaje.
 - [README del capítulo](chapters/ch10_datos_primarios_mdm/README.md)
 
+### Paso 11. Operaciones de datos
+
+```bash
+uv run python -m chapters.ch11_operaciones_datos.run
+uv run python -m chapters.ch11_operaciones_datos.run --sin-pipeline   # solo el informe
+```
+
+- **Qué produce:** ejecuta el **pipeline nocturno real**: reconstruye el warehouse y vuelve a pasar los capítulos 10, 6, 7 y 8 en orden de dependencias, con reintentos y un registro de auditoría en `data/warehouse/operations.duckdb`. Después genera el informe de operaciones: panel de valor (dólares, horas, riesgos y automatizaciones), SLAs, frescura y volumen, tickets por causa raíz y revisión posterior.
+- **Qué mirar:** `outputs/data_operations.md` y la línea temporal `outputs/ops_timeline.png`. Ejecuta el paso dos veces y verás que la tabla de volumen compara con la ejecución anterior.
+- **Qué probar:** en `inputs/operations.yaml`, sube el `failure_rate` del paso `pdm` y la `retry_success` a 0 y regenera el informe con `--sin-pipeline`: caen los SLAs y aparecen más tickets de fallos de proceso.
+- [README del capítulo](chapters/ch11_operaciones_datos/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -184,7 +197,10 @@ uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run
 uv run python -m chapters.ch08_calidad_datos.run
 uv run python -m chapters.ch09_arquitectura_datos.run
 uv run python -m chapters.ch10_datos_primarios_mdm.run
+uv run python -m chapters.ch11_operaciones_datos.run
 ```
+
+Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.
 
 Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de documentar el warehouse y de calcular el linaje. Para ver el avance, vuelve a ejecutar 4 y 5 al final.
 

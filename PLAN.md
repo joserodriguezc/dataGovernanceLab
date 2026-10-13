@@ -77,7 +77,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 | 8 | Data Quality | Calidad y certificación | Perfilado por forma, 17 reglas con pandera por dimensión y severidad, scorecard, incidencias y disposiciones, certificación apoyada en linaje, documentación y steward, detección frente al solucionario y valor | Se detecta el 100 % de los defectos sembrados; solo se certifica lo que cumple, incluidas sus fuentes |
 | 9 | Data Architecture | Principios y linter | As-is / to-be (Mermaid) con almacenes y flujos, principios, 10 estándares comprobados sobre el warehouse y sobre el SQL, revisión SDLC por CLI, programa, roadmap y medidas de éxito | El linter detecta nomenclatura, capas, tipos, claves, documentación y PII; la propuesta de ejemplo se rechaza |
 | 10 | Primary Data Management | Golden record de cliente | Deduplicación (reglas, rapidfuzz y revisión humana), trust logic con atribución de la fuente dorada, datos de referencia y jerarquías de localización y comercial, hub `pdm` y `curated.dim_customer` sin PII, búsqueda y valor | Precisión 100 % y recall 99,96 % frente al solucionario, con trazabilidad de cada valor a su origen |
-| 11 | Data Operations | Operaciones con SLAs | Mini orquestador de los pipelines de los capítulos 6–10, log de ejecuciones, SLAs, registro de incidentes y dashboard | Se detectan y registran las violaciones de SLA |
+| 11 | Data Operations | Operaciones con SLAs | Orquestador real de los capítulos 10, 6, 7 y 8 con reintentos y auditoría fuera del warehouse, SLAs y observabilidad, historial simulado de noches y tickets, causas raíz, panel de valor, TI frente a datos | Se registran todas las ejecuciones y se detectan las violaciones de SLA, frescura y volumen |
 
 ### Parte 3: Generar confianza con entregas basadas en valor
 
@@ -134,7 +134,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 8: Calidad y certificación | ✅ hecho |
 | Cap. 9: Arquitectura | ✅ hecho |
 | Cap. 10: Golden record | ✅ hecho |
-| Cap. 11: Operaciones | ⬜ pendiente |
+| Cap. 11: Operaciones | ✅ hecho |
 | Cap. 12: Kit de lanzamiento | ⬜ pendiente |
 | Cap. 13: Quick wins | ⬜ pendiente |
 | Cap. 14: Automatización | ⬜ pendiente |
