@@ -36,7 +36,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 10 | Primary Data Management | `uv run python -m chapters.ch10_datos_primarios_mdm.run` | Warehouse |
 | 11 | Data Operations | `uv run python -m chapters.ch11_operaciones_datos.run` | `data/raw` (reconstruye el warehouse y ejecuta los pasos 10, 6, 7 y 8) |
 | 12 | Launch Powerfully | `uv run python -m chapters.ch12_lanzamiento.run` | Warehouse con los pasos 6 a 10 (o el pipeline del paso 11) |
-| 13-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 13 | Delivering Quick Wins with Impact | `uv run python -m chapters.ch13_quick_wins.run` | Warehouse; para medir los problemas, pasos 6 a 10 |
+| 14-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -195,6 +196,17 @@ uv run python -m chapters.ch12_lanzamiento.run
 - **Qué probar:** escribe un término técnico ("golden record", "linaje", "PII") en un hito de `inputs/launch.yaml` y vuelve a ejecutar: la revisión del memo lo detecta. O pon `funding_approved: false` y mira cómo baja el liderazgo y cambia el enfoque recomendado.
 - [README del capítulo](chapters/ch12_lanzamiento/README.md)
 
+### Paso 13. Quick wins con impacto
+
+```bash
+uv run python -m chapters.ch13_quick_wins.run
+```
+
+- **Qué produce:** las necesidades de los stakeholders racionalizadas en problemas comunes y priorizadas (impacto, urgencia y coste) con su **tamaño medido en el warehouse**; para cada uno, tres opciones y la solución rápida frente a la de largo plazo; un roadmap por trimestres según la capacidad del equipo; la clasificación producto/servicio/activo; el registro de propiedad de los datos; y plantillas de estándar y procedimiento.
+- **Qué mirar:** `outputs/quick_wins.md` (empieza por la matriz de problemas comunes y la comparación con el emparejamiento automático) y `outputs/impact_vs_cost.png`.
+- **Qué probar:** sube `capacity_per_quarter` en `inputs/delivery.yaml` y mira cómo se adelanta el roadmap. O ejecútalo sin los capítulos 6 a 10 en el warehouse (`uv run dglab build` y directamente este paso): los tamaños aparecen como "sin medir".
+- [README del capítulo](chapters/ch13_quick_wins/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -211,6 +223,7 @@ uv run python -m chapters.ch09_arquitectura_datos.run
 uv run python -m chapters.ch10_datos_primarios_mdm.run
 uv run python -m chapters.ch11_operaciones_datos.run
 uv run python -m chapters.ch12_lanzamiento.run
+uv run python -m chapters.ch13_quick_wins.run
 ```
 
 Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.

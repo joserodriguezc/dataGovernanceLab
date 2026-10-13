@@ -1,0 +1,38 @@
+# Plantillas de política, estándar y procedimiento
+
+> Publicar guías sencillas es uno de los quick wins más fáciles: la comunidad de datos quiere saber qué hacer, cómo hacerlo y cómo alinearse con la oficina de datos. La política corporativa completa está en el capítulo 1.
+
+---
+
+## Plantilla de estándar
+
+**Estándar:** {{ standard.title }} · **Versión:** 1.0 · **Responsable:** {{ standard.owner }}
+
+1. **Propósito.** {{ standard.purpose }}
+2. **Alcance.** {{ standard.scope }}
+3. **Requisitos mínimos:**
+{% for r in standard.requirements %}
+   - {{ r }}
+{% endfor %}
+4. **Cómo se mide el cumplimiento.** {{ standard.measure }}
+5. **Excepciones.** Las aprueba el steward de negocio del dominio y quedan en el registro de disposiciones.
+
+---
+
+## Plantilla de procedimiento
+
+**Procedimiento:** {{ procedure.title }} · **Responsable:** {{ procedure.owner }}
+
+| Paso | Quién | Qué |
+|---:|---|---|
+{% for who, what in procedure.steps %}
+| {{ loop.index }} | {{ who }} | {{ what }} |
+{% endfor %}
+
+**Plazo objetivo:** {{ procedure.sla }}.
+
+---
+
+## Plantilla de política (resumen)
+
+Propósito y alcance · Responsable · Revisores y contribuidores · Aprobación · Requisitos · Roles y responsabilidades · Bucles de feedback · Medidas de éxito · Cumplimiento y auditoría · Glosario.

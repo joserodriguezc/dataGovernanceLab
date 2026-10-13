@@ -1,0 +1,168 @@
+# Necesidades escuchadas en las entrevistas (capítulo 2), tal como las dijo cada grupo.
+# "issue" es el problema común al que la oficina de datos asigna cada necesidad al
+# racionalizar la lista: hay que conocer bien el contenido, porque el mismo problema se
+# describe con palabras distintas.
+needs:
+  - {group: Ventas, text: "Varias versiones del mismo cliente", issue: customer_versions}
+  - {group: Ventas, text: "No vemos el historial completo de compras del cliente", issue: purchase_history}
+  - {group: Ventas, text: "El cierre de trimestre tarda demasiado", issue: slow_close}
+  - {group: Ventas, text: "La venta por producto se mide distinto en cada informe", issue: inconsistent_sales}
+  - {group: Marketing, text: "Miles de emails rebotados en cada campaña", issue: bad_contacts}
+  - {group: Marketing, text: "Direcciones postales erróneas que encarecen los envíos", issue: bad_addresses}
+  - {group: Marketing, text: "No podemos medir cuánto vende cada campaña", issue: campaign_attribution}
+  - {group: Marketing, text: "Varias versiones de un mismo cliente", issue: customer_versions}
+  - {group: Finanzas, text: "Agregación muy manual del reporting financiero", issue: inconsistent_sales}
+  - {group: Finanzas, text: "Nadie responde de la calidad de los datos de proveedor", issue: data_ownership}
+  - {group: Finanzas, text: "Precios negativos que descuadran la facturación", issue: negative_prices}
+  - {group: Tiendas, text: "No sabemos qué ha comprado un cliente online cuando viene a la tienda", issue: purchase_history}
+  - {group: Tiendas, text: "El cliente aparece duplicado en la tarjeta y en la web", issue: customer_versions}
+  - {group: Compras, text: "Proveedores sin contacto y sin responsable de sus datos", issue: data_ownership}
+  - {group: Compras, text: "Productos dados de alta sin categoría", issue: product_category}
+  - {group: Legal y Privacidad, text: "No sabemos dónde están los datos personales", issue: pii_location}
+
+# Problemas racionalizados: cómo se mide su tamaño en los datos, su prioridad y las opciones
+# de solución a corto y largo plazo. impact, urgency y cost: low | medium | high
+issues:
+  customer_versions:
+    title: Varias versiones del mismo cliente
+    outcome: O1                   # resultado de negocio del capítulo 5
+    measure: Registros de cliente que son duplicados de otro
+    size_sql: "SELECT 1 - (SELECT count(*) FROM pdm.customer_golden)::DOUBLE / (SELECT count(*) FROM pdm.customer_xref)"
+    size_unit: pct
+    impact: high
+    urgency: high
+    cost: high
+    short_term: "Publicar en el marketplace el cliente único que ya calcula el capítulo 10, con su buscador"
+    long_term: "Integrar el golden id en el CRM, el e-commerce y el POS"
+    options: ["Buscador sobre el cliente único (rápido)", "Informe de duplicados para los stewards", "Integración bidireccional completa"]
+    funding: cdao
+  purchase_history:
+    title: No se ve el historial de compras de un cliente
+    outcome: O1
+    measure: Ventas netas que no se pueden atribuir a un cliente identificado
+    size_sql: "SELECT 1 - (SELECT sum(net_sales) FROM curated.dim_customer) / ((SELECT sum(amount) FROM staging.stg_pos_sales) + (SELECT sum(amount) FROM staging.stg_ecom_orders WHERE status NOT IN ('cancelado', 'devuelto')))"
+    size_unit: pct
+    impact: high
+    urgency: medium
+    cost: low
+    short_term: "Vista de compras por cliente sobre dim_customer para tiendas y atención al cliente"
+    long_term: "Herramienta de historial de compras para marketing, ventas, atención al cliente y finanzas"
+    options: ["Vista sobre los datos actuales (rápido)", "Informe semanal por cliente", "Producto de historial de compras"]
+    funding: cdao
+  inconsistent_sales:
+    title: La cifra de ventas no cuadra entre informes
+    outcome: O3
+    measure: Datasets curados de ventas sin certificar
+    size_sql: "SELECT count(*) FILTER (WHERE NOT certified)::DOUBLE / count(*) FROM meta.catalog_tables WHERE layer = 'curated' AND domain = 'sales'"
+    size_unit: pct
+    impact: high
+    urgency: high
+    cost: medium
+    short_term: "Corregir en origen los precios negativos (DQ-08) para certificar la cifra de ventas"
+    long_term: "Retirar el cubo de Finanzas y las hojas regionales (capítulo 9)"
+    options: ["Excluir los precios negativos del cálculo", "Corregirlos en el POS", "Rediseñar la carga de ventas"]
+    funding: hybrid
+  bad_contacts:
+    title: Emails de clientes inválidos o vacíos
+    outcome: O1
+    measure: Clientes del CRM sin email válido
+    size_sql: "SELECT avg(CASE WHEN email IS NULL OR NOT regexp_full_match(email, '[^@\\s]+@[^@\\s]+\\.[a-z]{2,}') THEN 1 ELSE 0 END) FROM staging.stg_crm_customers"
+    size_unit: pct
+    impact: medium
+    urgency: medium
+    cost: low
+    short_term: "Hacer obligatorio y validar el email en el formulario de alta del CRM"
+    long_term: "Verificación del email con un servicio externo en el alta"
+    options: ["Validación en el alta (rápido)", "Campaña para que los clientes actualicen su email", "Servicio de verificación externo"]
+    funding: stakeholder
+  bad_addresses:
+    title: Códigos postales inválidos
+    outcome: O1
+    measure: Pedidos online con código postal de envío inválido
+    size_sql: "SELECT avg(CASE WHEN regexp_full_match(shipping_postal_code, '\\d{5}') THEN 0 ELSE 1 END) FROM staging.stg_ecom_orders"
+    size_unit: pct
+    impact: medium
+    urgency: low
+    cost: low
+    short_term: "Validar el código postal en el alta de cliente online (la causa raíz del capítulo 8)"
+    long_term: "Normalización de direcciones con un proveedor externo"
+    options: ["Validación en el alta (rápido)", "Corrección masiva con datos de referencia", "Proveedor de direcciones"]
+    funding: cdao
+  campaign_attribution:
+    title: No se mide la venta de cada campaña
+    outcome: O1
+    measure: Ventas sin cliente identificado (la atribución lo necesita)
+    size_sql: null
+    size_unit: null
+    impact: high
+    urgency: medium
+    cost: high
+    short_term: "Atribución simple: ventas de los clientes contactados frente a un grupo de control"
+    long_term: "Modelo de atribución multicanal sobre el cliente único"
+    options: ["Grupo de control (rápido)", "Atribución al último contacto", "Modelo multicanal"]
+    funding: stakeholder
+  data_ownership:
+    title: Nadie responde de los datos de proveedor
+    outcome: O3
+    measure: Dominios sin ejecutivo o sin steward de negocio
+    size_sql: null
+    size_unit: null
+    impact: medium
+    urgency: high
+    cost: low
+    short_term: "Nombrar al ejecutivo y a los stewards de Proveedor y Producto (registro de propiedad)"
+    long_term: "Datos primarios de proveedor"
+    options: ["Nombramientos en el comité (rápido)", "Campaña de activación de stewards", "Golden record de proveedor"]
+    funding: cdao
+  negative_prices:
+    title: Precios negativos en las ventas de tienda
+    outcome: O3
+    measure: Líneas de ticket con precio negativo
+    size_sql: "SELECT avg(CASE WHEN unit_price <= 0 THEN 1 ELSE 0 END) FROM staging.stg_pos_sales"
+    size_unit: pct
+    impact: medium
+    urgency: high
+    cost: low
+    short_term: "Bloquear en el POS los precios negativos fuera de las devoluciones"
+    long_term: "Modelo de devoluciones separado de las ventas"
+    options: ["Validación en el POS (rápido)", "Excluir del cálculo", "Rediseñar devoluciones"]
+    funding: cdao
+  product_category:
+    title: Productos sin categoría
+    outcome: O3
+    measure: Productos sin categoría
+    size_sql: "SELECT avg(CASE WHEN category IS NULL THEN 1 ELSE 0 END) FROM staging.stg_products"
+    size_unit: pct
+    impact: low
+    urgency: low
+    cost: low
+    short_term: "Campo obligatorio en el alta de producto"
+    long_term: "Datos primarios de producto con jerarquía de categorías"
+    options: ["Campo obligatorio (rápido)", "Revisión mensual por Compras", "Datos primarios de producto"]
+    funding: stakeholder
+  pii_location:
+    title: No se sabe dónde están los datos personales
+    outcome: O2
+    measure: Tablas fuera de raw con datos personales restringidos
+    size_sql: "SELECT count(DISTINCT table_fqn) FROM meta.catalog_columns WHERE classification = 'restricted' AND table_fqn NOT LIKE 'raw.%'"
+    size_unit: count
+    impact: high
+    urgency: high
+    cost: low
+    short_term: "Publicar la clasificación del capítulo 6 en el marketplace para el DPO"
+    long_term: "Reducir la PII a un solo lugar autorizado (capítulo 10)"
+    options: ["Publicar la clasificación (rápido)", "Informe mensual para el DPO", "Minimizar las copias de PII"]
+    funding: cdao
+  slow_close:
+    title: El cierre de trimestre es lento
+    outcome: O3
+    measure: Horas de conciliación manual por cierre
+    size_sql: null
+    size_unit: null
+    impact: medium
+    urgency: low
+    cost: high
+    short_term: "Reutilizar la cifra certificada en el cierre en lugar de recalcularla"
+    long_term: "Automatizar el cierre (capítulo 14)"
+    options: ["Reutilizar la cifra certificada", "Calendario de cierre con controles", "Automatizar el cierre"]
+    funding: hybrid

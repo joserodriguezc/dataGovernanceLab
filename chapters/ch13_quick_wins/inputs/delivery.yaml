@@ -1,0 +1,31 @@
+# Entrega continua: soluciones del equipo, su tipo y su uso; ideas de la comunidad de stewards.
+
+# Criterios del libro para distinguir producto, servicio y activo
+# continuous_support / continuous_delivery / needs_features: características de la solución
+# monthly_users: uso real (para decidir qué retirar)
+solutions:
+  - {name: Cliente único y su buscador, continuous_support: true, continuous_delivery: true, needs_features: true, monthly_users: 85}
+  - {name: Historial de compras por cliente, continuous_support: true, continuous_delivery: true, needs_features: true, monthly_users: 0}
+  - {name: Política de gobierno de datos, continuous_support: true, continuous_delivery: false, needs_features: false, monthly_users: 40}
+  - {name: Catálogo y marketplace de datos, continuous_support: true, continuous_delivery: false, needs_features: false, monthly_users: 120}
+  - {name: Reglas de calidad de datos, continuous_support: true, continuous_delivery: false, needs_features: false, monthly_users: 15}
+  - {name: Cuadro de ventas por canal, continuous_support: false, continuous_delivery: false, needs_features: false, monthly_users: 60}
+  - {name: Informe de clientes inactivos de 2023, continuous_support: false, continuous_delivery: false, needs_features: false, monthly_users: 0}
+  - {name: Cuadro de mando regional antiguo, continuous_support: false, continuous_delivery: false, needs_features: false, monthly_users: 2}
+
+# Comunicación de las entregas: impacto y si se ha comunicado
+communication:
+  - {win: "Buscador del cliente único", impact: high, communicated: true}
+  - {win: "Origen de la cifra de ventas validado", impact: high, communicated: false}
+  - {win: "Nuevo color del cuadro de ventas", impact: low, communicated: true}
+  - {win: "Limpieza de tablas temporales", impact: low, communicated: false}
+
+# Ideas de la comunidad de stewards (hackathon, buzón de ideas, formulario)
+ideas:
+  - {idea: "Avisar a la tienda cuando un cliente sin teléfono pasa por caja", submitted_by: Responsable de red de tiendas, channel: Formulario, issue: customer_versions}
+  - {idea: "Regla que bloquee precios negativos en el POS", submitted_by: Controller de ventas, channel: Hackathon, issue: negative_prices}
+  - {idea: "Lista de productos sin categoría para Compras cada lunes", submitted_by: Director de Compras, channel: Buzón de ideas, issue: product_category}
+
+# Capacidad del equipo por trimestre, en "unidades de coste" (low=1, medium=2, high=3)
+capacity_per_quarter: 4
+quarters: [T1 2027, T2 2027, T3 2027, T4 2027]
