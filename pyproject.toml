@@ -48,3 +48,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.flake8-bugbear]
+# typer declara las opciones de la CLI como valores por defecto: es su uso previsto
+extend-immutable-calls = ["typer.Argument", "typer.Option"]
