@@ -56,6 +56,10 @@ def dq_checks(con: duckdb.DuckDBPyConnection) -> dict[str, float]:
 def indicators(con: duckdb.DuckDBPyConnection) -> dict[str, float]:
     """Indicadores objetivos (proporciones entre 0 y 1)."""
     checks = dq_checks(con)
+    # Duplicados de cliente: en la fuente autorizada. Antes del capítulo 10 es el CRM;
+    # después, el golden record del hub de datos primarios.
+    customer_source = ("pdm.customer_golden" if _table_exists(con, "pdm", "customer_golden")
+                       else "staging.stg_crm_customers")
     lineage = 0.0
     if _table_exists(con, "meta", "lineage_edges"):  # lo creará el capítulo 7
         lineage = _scalar(con, """
@@ -68,10 +72,10 @@ def indicators(con: duckdb.DuckDBPyConnection) -> dict[str, float]:
             SELECT avg(CASE WHEN comment IS NOT NULL AND comment <> '' THEN 1 ELSE 0 END)
             FROM duckdb_tables() WHERE schema_name = 'curated'"""),
         "lineage_coverage": lineage,
-        "crm_duplicate_phones": _scalar(con, """
+        "crm_duplicate_phones": _scalar(con, f"""
             SELECT avg(CASE WHEN n > 1 THEN 1 ELSE 0 END) FROM (
               SELECT count(*) OVER (PARTITION BY phone) AS n
-              FROM staging.stg_crm_customers WHERE phone IS NOT NULL)"""),
+              FROM {customer_source} WHERE phone IS NOT NULL)"""),
         "dq_pass_rate": sum(checks.values()) / len(checks),
         "dq_worst_check": min(checks.values()),
     }

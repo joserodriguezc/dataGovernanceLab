@@ -51,8 +51,8 @@ def main(out_dir: Path | None = None, db_path: Path = WAREHOUSE_DB) -> dict[str,
         before = indicators(con)["documented_tables"]
         tables = extract(con)
         unknown = set(catalog_in.tables) - {t.fqn for t in tables}
-        if unknown:
-            raise ValueError(f"el catálogo anota tablas que no existen: {sorted(unknown)}")
+        for fqn in sorted(unknown):  # p. ej. curated.dim_customer antes del capítulo 10
+            console.print(f"[yellow]El catálogo anota {fqn}, que aún no existe: se omite[/yellow]")
         for t in tables:
             t.annotation = catalog_in.tables.get(t.fqn)
             if t.domain and t.domain in stewards:

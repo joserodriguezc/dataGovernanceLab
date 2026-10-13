@@ -33,7 +33,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 7 | Technical Metadata and Data Lineage | `uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run` | Warehouse; recomendable haber ejecutado el paso 6 |
 | 8 | Data Quality | `uv run python -m chapters.ch08_calidad_datos.run` | Warehouse; para certificar, pasos 6 y 7 |
 | 9 | Data Architecture | `uv run python -m chapters.ch09_arquitectura_datos.run` | Warehouse; para las medidas de éxito completas, pasos 6 y 8 |
-| 10-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 10 | Primary Data Management | `uv run python -m chapters.ch10_datos_primarios_mdm.run` | Warehouse |
+| 11-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -156,6 +157,19 @@ uv run python -m chapters.ch09_arquitectura_datos.review chapters/ch09_arquitect
 - **Qué probar:** corrige la propuesta en `inputs/proposals/` (renómbrala a `curated.dim_customer_sales`, lee de staging, quita el `SELECT *` y los datos personales) hasta que `review` la apruebe. También puedes cambiar un `CAST(... AS DOUBLE)` por `DECIMAL(18,2)` en el SQL del warehouse, reconstruirlo y ver cómo baja ARQ-06.
 - [README del capítulo](chapters/ch09_arquitectura_datos/README.md)
 
+### Paso 10. Gestión de datos primarios (golden record de cliente)
+
+```bash
+uv run python -m chapters.ch10_datos_primarios_mdm.run
+uv run python -m chapters.ch10_datos_primarios_mdm.lookup "telmo anton"
+```
+
+- **Qué produce:** el golden record de cliente. Deduplica los registros del CRM, el e-commerce y las tarjetas de tienda (reglas, coincidencia difusa y cola de revisión humana), aplica lógica de confianza por atributo con atribución de la fuente dorada, enriquece con datos de referencia (provincia, comunidad y región comercial) y calcula la vista única de ventas. **Escribe en el warehouse** el hub `pdm.*` y `curated.dim_customer`, sin datos personales directos.
+- **Qué mirar:** `outputs/primary_data.md`, sobre todo la precisión y el recall frente al solucionario, la cola de revisión (uno de los dos pares son dos personas distintas con el mismo nombre) y la calidad antes y después. Prueba también el buscador `lookup` con un nombre, un email o un teléfono.
+- **Qué probar:** en `inputs/pdm.yaml`, baja `auto_match_score` a 70 y comprueba cómo cae la precisión al unir personas distintas. O cambia el orden de fuentes de `email` para que el e-commerce vaya primero y mira cómo cambia la atribución.
+- **Después:** vuelve a ejecutar los pasos 4 y 5. El resultado "Duplicados de cliente por debajo del 0,5 %" pasa a estar logrado. Ejecuta también los pasos 6 y 7 para que `dim_customer` quede con steward y linaje.
+- [README del capítulo](chapters/ch10_datos_primarios_mdm/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -169,6 +183,7 @@ uv run python -m chapters.ch06_gestion_metadatos.run
 uv run python -m chapters.ch07_metadatos_tecnicos_linaje.run
 uv run python -m chapters.ch08_calidad_datos.run
 uv run python -m chapters.ch09_arquitectura_datos.run
+uv run python -m chapters.ch10_datos_primarios_mdm.run
 ```
 
 Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de documentar el warehouse y de calcular el linaje. Para ver el avance, vuelve a ejecutar 4 y 5 al final.

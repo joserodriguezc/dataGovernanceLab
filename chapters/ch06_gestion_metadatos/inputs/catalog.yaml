@@ -17,6 +17,11 @@ tables:
     domain: product
     format: dataset_curado
     tags: [producto, catálogo]
+  curated.dim_customer:
+    description: Cliente único (golden record del capítulo 10) sin datos personales directos, con localización, segmento, canales y ventas netas.
+    domain: customer
+    format: dataset_curado
+    tags: [cliente, golden record, vista única]
   curated.dim_store:
     description: Tiendas físicas con su región y fecha de apertura.
     domain: store

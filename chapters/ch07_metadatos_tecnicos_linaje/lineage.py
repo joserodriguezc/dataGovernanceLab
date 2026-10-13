@@ -151,7 +151,19 @@ def build_lineage(con: duckdb.DuckDBPyConnection, sql_files: list[Path],
         e, s = parse_sql(f.read_text(encoding="utf-8"), f.name, schema)
         edges += e
         steps += s
-    return edges, steps
+    return edges + external_edges(con), steps
+
+
+def external_edges(con: duckdb.DuckDBPyConnection) -> list[Edge]:
+    """Linaje que registran procesos que no son SQL (p. ej. el PDM del capítulo 10)."""
+    exists = con.execute("SELECT count(*) FROM information_schema.tables WHERE "
+                         "table_schema = 'meta' AND table_name = 'lineage_external'"
+                         ).fetchone()[0]
+    if not exists:
+        return []
+    return [Edge(*row) for row in con.execute(
+        "SELECT source_table, source_column, target_table, target_column, kind, expression, "
+        "sql_file FROM meta.lineage_external").fetchall()]
 
 
 def column_graph(edges: list[Edge]) -> nx.DiGraph:

@@ -14,7 +14,7 @@ allowed_reads:
 types:
   date_suffixes: [_date, _at, _ts]
   date_types: [DATE, TIMESTAMP]
-  money_names: [amount, price, cost, revenue, list_price, unit_price, unit_cost, net_amount]
+  money_names: [amount, price, cost, revenue, list_price, unit_price, unit_cost, net_amount, net_sales]
   money_types: [DECIMAL]
 
 # Clave de cada tabla: debe ser única y no nula
