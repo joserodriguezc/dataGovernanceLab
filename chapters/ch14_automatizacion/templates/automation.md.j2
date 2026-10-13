@@ -1,0 +1,92 @@
+# Automatización de datos en {{ company }}: informe semanal de ventas por región
+
+> Automatizar un proceso malo solo lo hace fallar más rápido. Primero se acuerda el problema; después se automatiza.
+
+## Paso 1. Objetivos
+
+| | |
+|---|---|
+| **Qué queremos lograr** | {{ goals.achieve }} |
+| **Qué funciona y se mantiene** | {{ goals.keep }} |
+| **Retos actuales** | {{ goals.challenges }} |
+| **Cómo sabremos que funciona** | {{ goals.success }} |
+
+## Paso 2. Proceso actual y puntos de dolor
+
+{{ process.people }} · {{ process.frequency_per_year }} veces al año · **{{ process.hours_per_year | num }} horas al año**.
+
+| # | Paso | Minutos por semana | Propenso a errores |
+|---:|---|---:|---|
+{% for s in process.steps %}
+| {{ loop.index0 }} | {{ s.step }} | {{ s.minutes | num }} | {{ "⚠️ Sí" if s.error_prone else "No" }} |
+{% endfor %}
+
+## Paso 3. Enunciado del problema
+
+> {{ problem }}
+
+## Paso 4. Enfoques y ROI
+
+![ROI por enfoque]({{ chart_name }})
+
+| Enfoque | Capacidades | Horas manuales eliminadas/año | Ahorro anual neto | Coste puntual | ROI a {{ horizon }} años | Recuperación |
+|---|---|---:|---:|---:|---:|---:|
+{% for r in rois %}
+| {{ "**" ~ r.approach.name ~ "** ⬅️" if r.key == chosen else r.approach.name }} | {{ r.approach.capabilities | join(", ") }} | {{ r.hours_removed | num }} | {{ r.annual_saving | money }} | {{ r.one_time_cost | money }} | {{ r.roi | pct }} | {{ r.payback_weeks | num }} semanas |
+{% endfor %}
+
+Ahorro anual = (horas manuales eliminadas − horas de mantenimiento) × {{ cost_per_hour | money }}/h. Coste puntual = horas de construcción × {{ cost_per_hour | money }}/h. Los supuestos se comparten con los stakeholders **antes** de empezar.
+
+## Paso 5. Ejecución
+
+El enfoque {{ chosen }} está implementado en [automation.py](../automation.py) y se ejecuta sobre el warehouse:
+
+| Medida | Antes (manual) | Ahora (automático) |
+|---|---:|---:|
+| Tiempo por informe | {{ manual_minutes | num }} minutos | {{ seconds | num(2) }} segundos |
+| Semanas cubiertas | Una cada vez | {{ weeks }} de golpe |
+| Diferencia con la cifra oficial de ventas | No cuadra | {{ diff | money(2) }} |
+| Ventas online sin región asignable | Se reparten a ojo | {{ unmapped | pct(2) }} |
+
+### Monitorización y alertas
+
+{{ alerts | length }} alertas en {{ weeks }} semanas:
+
+| Tipo | Alertas | Ejemplo |
+|---|---:|---|
+{% for kind, items in alert_groups %}
+| {{ kind }} | {{ items | length }} | {{ items[0].week.strftime("%d/%m/%Y") }} · {{ items[0].region }}: {{ items[0].message }} |
+{% endfor %}
+
+Las alertas detalladas están en `alerts.csv`. Antes, nadie se enteraba hasta que el director regional preguntaba.
+
+## Paso 6. Medir e informar
+
+| Medida | Previsto | Real |
+|---|---:|---:|
+| Horas ahorradas al año | {{ chosen_roi.hours_removed | num }} | {{ chosen_roi.hours_removed | num }} (todos los pasos manuales eliminados) |
+| El informe cuadra con la cifra oficial | Sí | {{ "✅ Sí" if diff == 0 else "❌ No (" ~ (diff | money(2)) ~ ")" }} |
+| Informe disponible cada lunes | Sí | ✅ Se genera en segundos |
+
+Hay que medir también lo cualitativo: una encuesta a los analistas regionales antes y después sobre el tiempo dedicado a trabajo repetitivo.
+
+## Enriquecimiento de terceros: elegir proveedor de direcciones
+
+{{ invalid }} pedidos online tienen un código postal de envío inválido. Antes de comprar, se prueban dos proveedores contra el código postal real de cada persona:
+
+| Proveedor | Precio/registro | Devueltos | Correctos | Erróneos | Coste total | Coste por corrección |
+|---|---:|---:|---:|---:|---:|---:|
+{% for v in vendors %}
+| {{ "**" ~ v.vendor.name ~ "** ⬅️" if v.vendor.name == best.vendor.name else v.vendor.name }} | {{ v.vendor.price | money(2) }} | {{ v.returned }} ({{ (v.returned / v.queried) | pct }}) | {{ v.correct }} | {{ v.wrong }} | {{ v.cost | money(2) }} | {{ v.cost_per_correct | money(2) }} |
+{% endfor %}
+
+**Recomendación: {{ best.vendor.name }}.** Un dato erróneo de un proveedor es peor que no tener dato: un código postal válido pero falso ya no lo detecta ninguna regla de calidad. {{ best.correct }} pedidos corregidos suponen unos {{ (best.correct * revenue_per_fix) | money }} al año en devoluciones y reenvíos evitados.
+
+## Siguientes candidatos a automatizar
+
+| Dominio | Caso de uso | Ya disponible en el laboratorio |
+|---|---|---|
+| Cliente | Campañas personalizadas sin duplicados | Cliente único (capítulo 10) |
+| Cliente | Alta de clientes con validación de contacto | Reglas de calidad (capítulo 8) |
+| Operaciones | Cierre mensual de ventas | Este informe, ampliado a Finanzas |
+| Operaciones | Gestión de riesgo: datos personales en sitios no autorizados | Clasificación (capítulo 6) y linter (capítulo 9) |

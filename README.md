@@ -37,7 +37,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 11 | Data Operations | `uv run python -m chapters.ch11_operaciones_datos.run` | `data/raw` (reconstruye el warehouse y ejecuta los pasos 10, 6, 7 y 8) |
 | 12 | Launch Powerfully | `uv run python -m chapters.ch12_lanzamiento.run` | Warehouse con los pasos 6 a 10 (o el pipeline del paso 11) |
 | 13 | Delivering Quick Wins with Impact | `uv run python -m chapters.ch13_quick_wins.run` | Warehouse; para medir los problemas, pasos 6 a 10 |
-| 14-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 14 | Data Automation | `uv run python -m chapters.ch14_automatizacion.run` | Warehouse con el paso 10 (o el pipeline del paso 11) |
+| 15-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -207,6 +208,17 @@ uv run python -m chapters.ch13_quick_wins.run
 - **Qué probar:** sube `capacity_per_quarter` en `inputs/delivery.yaml` y mira cómo se adelanta el roadmap. O ejecútalo sin los capítulos 6 a 10 en el warehouse (`uv run dglab build` y directamente este paso): los tamaños aparecen como "sin medir".
 - [README del capítulo](chapters/ch13_quick_wins/README.md)
 
+### Paso 14. Automatización de datos
+
+```bash
+uv run python -m chapters.ch14_automatizacion.run
+```
+
+- **Qué produce:** los 6 pasos del libro aplicados al informe semanal de ventas por región que hoy se monta a mano: objetivos, proceso actual, problema, tres enfoques con su ROI, el **informe automatizado de verdad** (cuadra al céntimo con la cifra oficial), monitorización con alertas y la evaluación de dos proveedores externos de direcciones contra el código postal real de cada persona.
+- **Qué mirar:** `outputs/automation.md`, sobre todo la tabla del paso 5 (antes frente a ahora) y la comparación de proveedores (el más barato devuelve muchos datos erróneos).
+- **Qué probar:** en `inputs/automation.yaml`, baja `z_threshold` a 1 y verás cómo se disparan las alertas de volumen: demasiadas alertas acaban ignoradas. O cambia la `accuracy` de un proveedor y mira cómo cambia la recomendación.
+- [README del capítulo](chapters/ch14_automatizacion/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -224,6 +236,7 @@ uv run python -m chapters.ch10_datos_primarios_mdm.run
 uv run python -m chapters.ch11_operaciones_datos.run
 uv run python -m chapters.ch12_lanzamiento.run
 uv run python -m chapters.ch13_quick_wins.run
+uv run python -m chapters.ch14_automatizacion.run
 ```
 
 Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.

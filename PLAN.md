@@ -85,7 +85,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 |---|---|---|---|---|
 | 12 | Launch Powerfully | Kit de lanzamiento | Preparación en 5 dimensiones calculada con la evidencia de los capítulos 2-10, mensaje as-is/to-be por audiencia, memo narrativo generado desde los capítulos 1, 2, 4, 5 y 9 con revisión de jerga, comunicación, feedback, expectativas y victorias entregadas | El memo se regenera desde los inputs y no contiene jerga de datos |
 | 13 | Delivering Quick Wins with Impact | Backlog priorizado | Racionalización de necesidades, priorización con tamaño medido en el warehouse, opciones y corto/largo plazo, roadmap por capacidad, producto/servicio/activo, comunicación, registro de propiedad, ideas y plantillas | Cada problema está ligado a un resultado del capítulo 5 |
-| 14 | Data Automation | Automatizar un proceso manual | El proceso manual y su versión automatizada, enriquecimiento de terceros simulado, ROI antes y después (6 pasos) | El ROI se calcula con tiempos medidos, no supuestos |
+| 14 | Data Automation | Automatizar un proceso manual | Los 6 pasos sobre el informe semanal de ventas por región: enfoques A/B/C con ROI, informe automatizado que cuadra con la cifra oficial, monitorización con umbral estadístico y evaluación de proveedores de enriquecimiento contra el solucionario | El informe automatizado cuadra al céntimo con la cifra oficial; el ROI se calcula con la fórmula del libro |
 | 15 | Adoption That Drives Business Success | Métricas de adopción | Logs de uso sintéticos → KPIs (usuarios activos, retención, cobertura), coste de la baja adopción, roadmap | Los KPIs se calculan por segmento y el roadmap ataca las barreras detectadas |
 | 16 | Delivering Trusted Results | Revisión de capacidades | Reporte HTML consolidado de los capítulos 6–11 y plantilla para comunicar desvíos | El reporte compara los compromisos del capítulo 5 con los resultados reales |
 
@@ -137,7 +137,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 11: Operaciones | ✅ hecho |
 | Cap. 12: Kit de lanzamiento | ✅ hecho |
 | Cap. 13: Quick wins | ✅ hecho |
-| Cap. 14: Automatización | ⬜ pendiente |
+| Cap. 14: Automatización | ✅ hecho |
 | Cap. 15: Adopción | ⬜ pendiente |
 | Cap. 16: Revisión de capacidades | ⬜ pendiente |
 | Cap. 17: Caso NovaPay | ⬜ pendiente |
