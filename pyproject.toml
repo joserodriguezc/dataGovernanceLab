@@ -1,0 +1,45 @@
+[project]
+name = "dglab"
+version = "0.1.0"
+description = "Laboratorio de gobierno de datos: el Data Governance Handbook convertido en microproyectos"
+readme = "README.md"
+authors = [
+    { name = "José Ignacio Rodríguez", email = "69468130+joserodriguezc@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.6",
+    "faker>=40.43.0",
+    "jinja2>=3.1.6",
+    "matplotlib>=3.11.2",
+    "networkx>=3.7",
+    "pandas>=3.0.6",
+    "pandera>=0.34.1",
+    "pydantic>=2.14.1",
+    "pyyaml>=6.0.3",
+    "rapidfuzz>=3.14.6",
+    "rich>=15.0.0",
+    "sqlglot>=30.22.0",
+    "typer>=0.27.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "chapters"]
+addopts = "--import-mode=importlib"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

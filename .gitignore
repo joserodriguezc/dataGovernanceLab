@@ -1,0 +1,30 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Datos generados
+data/raw/*
+!data/raw/.gitkeep
+data/warehouse/*.duckdb
+data/warehouse/*.duckdb.wal
+
+# Artefactos generados por los capítulos
+chapters/*/outputs/*
+!chapters/*/outputs/.gitkeep
+
+# Herramientas
+.pytest_cache/
+.ruff_cache/
+
+# Libro de referencia: tiene copyright, solo se referencia y nunca se versiona
+docs/*.pdf
+docs/*.epub
+docs/*.mobi
+docs/book/
