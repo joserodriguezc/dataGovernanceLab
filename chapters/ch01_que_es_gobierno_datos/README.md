@@ -45,15 +45,16 @@ uv run pytest chapters/ch01_que_es_gobierno_datos
 
 ## Decisiones de modelado
 
+- **Moneda: USD.** Se configura en `dglab.company.CURRENCY` y todos los informes usan `dglab.reporting.fmt_money`.
 - **Valoración anual.** Activo = ingresos + horas ahorradas × coste/hora + valor de cliente. Pasivo = probabilidad de multa × importe + horas perdidas × coste/hora + impacto en el cliente. La mejora anual (más activo o menos pasivo) es el beneficio del caso de negocio.
-- **Conservador por defecto** (`include_unvetted_benefits: false`). Las líneas A3 y L4 no las ha validado aún el negocio y no cuentan: suman 840.000 €/año que quedan como potencial adicional.
+- **Conservador por defecto** (`include_unvetted_benefits: false`). Las líneas A3 y L4 no las ha validado aún el negocio y no cuentan: suman US$ 840.000/año que quedan como potencial adicional.
 - **Flujos mensuales a 36 meses.** La construcción se paga a partes iguales durante la duración de cada opción y la operación empieza al terminarla. El beneficio crece de forma lineal mientras se construye, porque se entrega de forma iterativa.
 - **Estado del scorecard.** Verde si la métrica está completa o falta tiempo, amarillo si la fecha comprometida está a 30 días o menos, y rojo si ha vencido sin completarse.
 
 ## Conclusiones para NovaMercado
 
-1. **La data equity actual es negativa (−1,08 M€).** Los pasivos (PII sin clasificar, métricas inconsistentes, duplicados) pesan más que el valor que hoy se obtiene de los datos. El programa la lleva a +2,16 M€, con una mejora validada de **2,58 M€/año**.
-2. **El timeline preferido es la opción con más VAN** (2,25 M€, payback en el mes 21). La opción rápida llega antes al valor completo, pero su sobrecoste no se compensa en 36 meses. La lenta recupera antes la inversión (mes 17) porque gasta menos al mes, pero acumula menos valor. Por eso conviene presentar las tres: la dirección ve que se pensó en sus expectativas.
+1. **La data equity actual es negativa (−US$ 1,08 M).** Los pasivos (PII sin clasificar, métricas inconsistentes, duplicados) pesan más que el valor que hoy se obtiene de los datos. El programa la lleva a +US$ 2,16 M, con una mejora validada de **US$ 2,58 M/año**.
+2. **El timeline preferido es la opción con más VAN** (US$ 2,25 M, payback en el mes 21). La opción rápida llega antes al valor completo, pero su sobrecoste no se compensa en 36 meses. La lenta recupera antes la inversión (mes 17) porque gasta menos al mes, pero acumula menos valor. Por eso conviene presentar las tres: la dirección ve que se pensó en sus expectativas.
 3. **Decisión: lanzar.** Hay tres impulsores (regulatorio, petición ejecutiva y petición de negocio) y ninguna señal de alerta.
 4. **El scorecard ya muestra dónde actuar.** Falta el ejecutivo del dominio de proveedores, cuya fecha ha vencido, y el owner del POS en el dominio de cliente, que está en riesgo. Son las primeras conversaciones del capítulo 2 (coalición de defensores).
 

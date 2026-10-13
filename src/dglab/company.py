@@ -4,6 +4,10 @@ COMPANY_NAME = "NovaMercado"
 COMPANY_DESCRIPTION = "Retail omnicanal (tiendas físicas, e-commerce y app móvil)"
 FINANCIAL_SUBSIDIARY = "NovaPay"  # filial financiera regulada (capítulo 17)
 
+# Moneda de todos los importes del laboratorio
+CURRENCY = "USD"
+CURRENCY_SYMBOL = "US$"
+
 # Dominios de datos y su unidad de negocio responsable
 DATA_DOMAINS: dict[str, str] = {
     "customer": "Marketing y CRM",

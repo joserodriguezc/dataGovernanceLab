@@ -31,17 +31,17 @@ from chapters.ch01_que_es_gobierno_datos.scorecard import (
 # --- Data equity -------------------------------------------------------------------------
 
 EQUITY = {
-    "hourly_rate_eur": 50,
+    "hourly_rate_usd": 50,
     "assets": [
         {"id": "A1", "name": "a", "domain": "customer", "description": "", "vetted_by": "CMO",
-         "current": {"revenue_eur": 100}, "target": {"revenue_eur": 300, "hours_saved": 2}},
+         "current": {"revenue_usd": 100}, "target": {"revenue_usd": 300, "hours_saved": 2}},
         {"id": "A2", "name": "b", "domain": "product", "description": "", "vetted_by": None,
-         "current": {}, "target": {"revenue_eur": 1000}},
+         "current": {}, "target": {"revenue_usd": 1000}},
     ],
     "liabilities": [
         {"id": "L1", "name": "c", "domain": "sales", "description": "", "vetted_by": "CFO",
-         "current": {"fine_probability": 0.5, "fine_amount_eur": 1000, "hours_lost": 4},
-         "target": {"fine_probability": 0.1, "fine_amount_eur": 1000}},
+         "current": {"fine_probability": 0.5, "fine_amount_usd": 1000, "hours_lost": 4},
+         "target": {"fine_probability": 0.1, "fine_amount_usd": 1000}},
     ],
 }
 
@@ -71,7 +71,7 @@ def test_unknown_domain_is_rejected():
 # --- Caso de negocio ---------------------------------------------------------------------
 
 OPTION = TimelineOption(id="x", name="X", description="", duration_months=4,
-                        build_cost_eur=400, run_cost_annual_eur=120)
+                        build_cost_usd=400, run_cost_annual_usd=120)
 
 
 def test_monthly_flows_spread_build_and_ramp_benefit():

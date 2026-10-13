@@ -8,9 +8,9 @@ from pathlib import Path
 from rich.console import Console
 
 from dglab import viz
-from dglab.company import DOMAIN_NAMES
+from dglab.company import CURRENCY_SYMBOL, DOMAIN_NAMES
 from dglab.config import load_yaml
-from dglab.reporting import fmt_eur, render_template, write_text
+from dglab.reporting import fmt_money, render_template, write_text
 
 from .business_case import BusinessCaseInput, OptionResult, evaluate_business_case
 from .charter import ProgramInput, assess_launch, lint_vision
@@ -40,7 +40,7 @@ def plot_cashflow(results: list[OptionResult], recommended: str, path: Path) -> 
                     textcoords="offset points", va="center", fontsize=9,
                     color=viz.TEXT_SECONDARY)
     ax.set_xlabel("Mes", color=viz.TEXT_SECONDARY)
-    ax.set_ylabel("Millones de €", color=viz.TEXT_SECONDARY)
+    ax.set_ylabel(f"Millones de {CURRENCY_SYMBOL}", color=viz.TEXT_SECONDARY)
     ax.legend(frameon=False, loc="upper left", labelcolor=viz.TEXT_SECONDARY)
     viz.set_titles(ax, "Flujo de caja neto acumulado por opción",
                    "Beneficios validados por el negocio · el punto marca el mes de payback")
@@ -86,7 +86,7 @@ def main(out_dir: Path | None = None) -> dict[str, Path]:
             glossary=program.glossary)),
         "data_equity": write_text(out_dir / "data_equity.md", render_template(
             TEMPLATES, "data_equity.md.j2", company=program.company, s=equity,
-            hourly_rate=equity_in.hourly_rate_eur, domain_names=DOMAIN_NAMES)),
+            hourly_rate=equity_in.hourly_rate_usd, domain_names=DOMAIN_NAMES)),
         "chart": plot_cashflow(results, bc.recommended_option, out_dir / CHART_NAME),
         "business_case": write_text(out_dir / "business_case.md", render_template(
             TEMPLATES, "business_case.md.j2", bc=bc, results=results, rec=recommended,
@@ -101,12 +101,12 @@ def main(out_dir: Path | None = None) -> dict[str, Path]:
     }
 
     console.rule("[bold]Capítulo 1: ¿Qué es el gobierno de datos?")
-    console.print(f"Data equity actual: {fmt_eur(equity.equity('current'))} → "
-                  f"objetivo: {fmt_eur(equity.equity('target'))}")
-    console.print(f"Beneficio anual usado en el caso de negocio: {fmt_eur(annual_benefit)}")
+    console.print(f"Data equity actual: {fmt_money(equity.equity('current'))} → "
+                  f"objetivo: {fmt_money(equity.equity('target'))}")
+    console.print(f"Beneficio anual usado en el caso de negocio: {fmt_money(annual_benefit)}")
     for r in results:
         payback = f"mes {r.payback_month}" if r.payback_month else "fuera del horizonte"
-        console.print(f"  • {r.option.name}: VAN {fmt_eur(r.npv)}, payback {payback}")
+        console.print(f"  • {r.option.name}: VAN {fmt_money(r.npv)}, payback {payback}")
     console.print(f"Lanzamiento: [bold]{launch.verdict.upper()}[/bold]. {launch.rationale}")
     if vision_issues:
         console.print("[yellow]Visión a revisar:[/yellow] " + " ".join(vision_issues))

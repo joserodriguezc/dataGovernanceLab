@@ -1,7 +1,7 @@
-# Valoración anual de activos y pasivos de datos de NovaMercado (euros/año).
+# Valoración anual de activos y pasivos de datos de NovaMercado (USD/año).
 # "current" es la situación actual y "target" la esperada tras el programa.
 # Una línea solo cuenta en el caso de negocio conservador si el negocio la validó ("vetted_by").
-hourly_rate_eur: 45  # coste medio cargado de una hora de trabajo
+hourly_rate_usd: 45  # coste medio cargado de una hora de trabajo
 
 assets:
   - id: A1
@@ -9,8 +9,8 @@ assets:
     domain: customer
     description: Segmentación y personalización con un cliente unificado entre canales.
     vetted_by: CMO
-    current: {revenue_eur: 200000}
-    target: {revenue_eur: 1200000, customer_value_eur: 250000}
+    current: {revenue_usd: 200000}
+    target: {revenue_usd: 1200000, customer_value_usd: 250000}
   - id: A2
     name: Reporting de ventas certificado
     domain: sales
@@ -23,8 +23,8 @@ assets:
     domain: product
     description: Decisiones de surtido por tienda con atributos de producto completos.
     vetted_by: null  # pendiente de validar con Comercial
-    current: {revenue_eur: 0}
-    target: {revenue_eur: 600000}
+    current: {revenue_usd: 0}
+    target: {revenue_usd: 600000}
   - id: A4
     name: Catálogo de proveedores fiable
     domain: supplier
@@ -39,8 +39,8 @@ liabilities:
     domain: customer
     description: Datos personales repartidos por sistemas sin clasificar ni proteger.
     vetted_by: DPO
-    current: {fine_probability: 0.08, fine_amount_eur: 4000000, customer_impact_eur: 150000}
-    target: {fine_probability: 0.02, fine_amount_eur: 4000000, customer_impact_eur: 40000}
+    current: {fine_probability: 0.08, fine_amount_usd: 4000000, customer_impact_usd: 150000}
+    target: {fine_probability: 0.02, fine_amount_usd: 4000000, customer_impact_usd: 40000}
   - id: L2
     name: Métricas de ventas inconsistentes entre informes
     domain: sales
@@ -53,8 +53,8 @@ liabilities:
     domain: customer
     description: Envíos duplicados, mala experiencia y trabajo manual de depuración.
     vetted_by: CMO
-    current: {hours_lost: 3000, customer_impact_eur: 200000}
-    target: {hours_lost: 500, customer_impact_eur: 50000}
+    current: {hours_lost: 3000, customer_impact_usd: 200000}
+    target: {hours_lost: 500, customer_impact_usd: 50000}
   - id: L4
     name: Datos de proveedores sin responsable
     domain: supplier

@@ -18,8 +18,8 @@ class TimelineOption(BaseModel):
     name: str
     description: str
     duration_months: int = Field(gt=0)
-    build_cost_eur: float = Field(ge=0)
-    run_cost_annual_eur: float = Field(ge=0)
+    build_cost_usd: float = Field(ge=0)
+    run_cost_annual_usd: float = Field(ge=0)
 
 
 class Program(BaseModel):
@@ -88,7 +88,7 @@ def monthly_flows(
     costs, benefits = [], []
     for month in range(1, horizon_months + 1):
         building = month <= d
-        cost = option.build_cost_eur / d if building else option.run_cost_annual_eur / 12
+        cost = option.build_cost_usd / d if building else option.run_cost_annual_usd / 12
         costs.append(cost)
         benefits.append(annual_benefit / 12 * min(month / d, 1.0))
     return costs, benefits

@@ -19,25 +19,25 @@ State = Literal["current", "target"]
 class AssetValue(BaseModel):
     """Valor anual que aporta un activo de datos."""
 
-    revenue_eur: float = Field(0, ge=0)
+    revenue_usd: float = Field(0, ge=0)
     hours_saved: float = Field(0, ge=0)
-    customer_value_eur: float = Field(0, ge=0)  # gasto adicional o retención atribuible
+    customer_value_usd: float = Field(0, ge=0)  # gasto adicional o retención atribuible
 
     def value(self, hourly_rate: float) -> float:
-        return self.revenue_eur + self.hours_saved * hourly_rate + self.customer_value_eur
+        return self.revenue_usd + self.hours_saved * hourly_rate + self.customer_value_usd
 
 
 class LiabilityValue(BaseModel):
     """Coste anual que genera un pasivo de datos."""
 
     fine_probability: float = Field(0, ge=0, le=1)
-    fine_amount_eur: float = Field(0, ge=0)
+    fine_amount_usd: float = Field(0, ge=0)
     hours_lost: float = Field(0, ge=0)
-    customer_impact_eur: float = Field(0, ge=0)  # gasto perdido o abandono atribuible
+    customer_impact_usd: float = Field(0, ge=0)  # gasto perdido o abandono atribuible
 
     def value(self, hourly_rate: float) -> float:
-        expected_fine = self.fine_probability * self.fine_amount_eur
-        return expected_fine + self.hours_lost * hourly_rate + self.customer_impact_eur
+        expected_fine = self.fine_probability * self.fine_amount_usd
+        return expected_fine + self.hours_lost * hourly_rate + self.customer_impact_usd
 
 
 class _EquityItem(BaseModel):
@@ -66,7 +66,7 @@ class DataLiability(_EquityItem):
 
 
 class DataEquityInput(BaseModel):
-    hourly_rate_eur: float = Field(gt=0)
+    hourly_rate_usd: float = Field(gt=0)
     assets: list[DataAsset]
     liabilities: list[DataLiability]
 
@@ -118,7 +118,7 @@ class EquitySummary:
 
 
 def evaluate_equity(inp: DataEquityInput) -> EquitySummary:
-    rate = inp.hourly_rate_eur
+    rate = inp.hourly_rate_usd
     lines = [
         EquityLine(a.id, a.name, "asset", a.domain, a.vetted_by,
                    a.current.value(rate), a.target.value(rate))

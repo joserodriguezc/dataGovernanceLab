@@ -35,17 +35,17 @@ options:
     name: Timeline preferido
     description: Ritmo sostenible con el equipo propio y apoyo puntual externo.
     duration_months: 18
-    build_cost_eur: 2400000
-    run_cost_annual_eur: 500000
+    build_cost_usd: 2400000
+    run_cost_annual_usd: 500000
   - id: fast
     name: Rápido y caro
     description: Más equipo y consultoría para llegar antes al valor.
     duration_months: 12
-    build_cost_eur: 3300000
-    run_cost_annual_eur: 550000
+    build_cost_usd: 3300000
+    run_cost_annual_usd: 550000
   - id: slow
     name: Lento y barato
     description: Solo con el equipo actual, con entregas espaciadas.
     duration_months: 30
-    build_cost_eur: 1900000
-    run_cost_annual_eur: 450000
+    build_cost_usd: 1900000
+    run_cost_annual_usd: 450000

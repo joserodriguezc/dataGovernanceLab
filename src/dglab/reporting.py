@@ -5,21 +5,23 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
+from dglab.company import CURRENCY_SYMBOL
 
-def fmt_eur(value: float, decimals: int = 0) -> str:
-    """Formatea un importe en euros: 1234567.8 -> '1.234.568 €'."""
-    text = f"{value:,.{decimals}f}".replace(",", "_").replace(".", ",").replace("_", ".")
-    return f"{text} €"
+
+def fmt_num(value: float, decimals: int = 0) -> str:
+    """Formatea un número con separador de miles español: 1234567.8 -> '1.234.568'."""
+    return f"{value:,.{decimals}f}".replace(",", "_").replace(".", ",").replace("_", ".")
+
+
+def fmt_money(value: float, decimals: int = 0) -> str:
+    """Formatea un importe en la moneda del laboratorio: 1234567.8 -> 'US$ 1.234.568'."""
+    sign = "-" if value < 0 else ""
+    return f"{sign}{CURRENCY_SYMBOL} {fmt_num(abs(value), decimals)}"
 
 
 def fmt_pct(value: float, decimals: int = 0) -> str:
     """Formatea una proporción como porcentaje: 0.425 -> '42,5 %' (con decimals=1)."""
     return f"{value * 100:.{decimals}f}".replace(".", ",") + " %"
-
-
-def fmt_num(value: float, decimals: int = 0) -> str:
-    """Formatea un número con separador de miles español."""
-    return fmt_eur(value, decimals).removesuffix(" €")
 
 
 def template_env(template_dir: Path) -> Environment:
@@ -31,7 +33,7 @@ def template_env(template_dir: Path) -> Environment:
         lstrip_blocks=True,
         keep_trailing_newline=True,
     )
-    env.filters.update(eur=fmt_eur, pct=fmt_pct, num=fmt_num)
+    env.filters.update(money=fmt_money, pct=fmt_pct, num=fmt_num)
     return env
 
 
