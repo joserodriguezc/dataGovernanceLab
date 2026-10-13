@@ -17,6 +17,9 @@ uv sync
 ## Uso
 
 ```bash
+# Generar los datos sintéticos de NovaMercado y construir el warehouse DuckDB
+uv run dglab build
+
 # Ejecutar el microproyecto de un capítulo
 uv run python -m chapters.ch01_que_es_gobierno_datos.run
 
@@ -35,7 +38,7 @@ src/dglab/        paquete compartido (rutas, empresa ficticia, datos sintéticos
 data/raw/         CSV sintéticos (generados, no versionados)
 data/warehouse/   base DuckDB de NovaMercado (generada, no versionada)
 chapters/chNN_*/  un microproyecto por capítulo: README, inputs/, run.py, outputs/, tests/
-docs/             referencia bibliográfica y notas (el libro no se versiona)
+docs/             referencia bibliográfica y documentación de los datos sintéticos
 tests/            tests del paquete compartido
 ```
 

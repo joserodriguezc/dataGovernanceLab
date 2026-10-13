@@ -48,10 +48,10 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 
 | Componente | Ubicación | Descripción |
 |---|---|---|
-| Generador sintético | `src/dglab/synthetic/` | Genera con Faker (locale `es_ES`) y semilla fija los CSV por sistema de origen en `data/raw/`, con los defectos sembrados |
-| Carga al warehouse | `src/dglab/synthetic/` | Carga en `data/warehouse/novamercado.duckdb` con esquemas `raw`, `staging` y `curated` |
+| Generador sintético | `src/dglab/synthetic/` | Genera con Faker (locale `es_ES`) y semilla fija los CSV por sistema de origen en `data/raw/`, con los defectos sembrados y un solucionario en `data/raw/_truth/` |
+| Carga al warehouse | `src/dglab/warehouse/` | Carga en `data/warehouse/novamercado.duckdb` con esquemas `raw`, `staging` y `curated` |
 | Reporting | `src/dglab/reporting.py` | Helpers jinja2 para generar Markdown y HTML, y para guardar figuras |
-| CLI | `dglab` (typer) | `dglab generate`, `dglab load` y `dglab reset` |
+| CLI | `dglab` (typer) | `dglab build`, `dglab generate`, `dglab load` y `dglab reset` |
 
 **Criterios de aceptación:** dos ejecuciones con la misma semilla producen datos idénticos; las tasas de defectos sembrados se pueden configurar y se comprueban con tests.
 
@@ -122,7 +122,7 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Paso | Estado |
 |---|---|
 | Setup: entorno uv, estructura y plan | ✅ hecho |
-| Fase 0: datos sintéticos y warehouse | ⬜ pendiente |
+| Fase 0: datos sintéticos y warehouse | ✅ hecho ([docs/datos_sinteticos.md](docs/datos_sinteticos.md)) |
 | Cap. 1: Charter y caso de negocio | ✅ hecho |
 | Cap. 2: Stakeholders y sponsor | ✅ hecho |
 | Cap. 3: Diseño organizativo | ✅ hecho |

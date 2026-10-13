@@ -1,9 +1,10 @@
-"""Generador de datos sintéticos de NovaMercado (Fase 0, pendiente de implementar).
+"""Datos sintéticos de NovaMercado: generador determinista con defectos sembrados."""
 
-Generará con semilla fija los datos de clientes, productos, proveedores, tiendas y pedidos
-de cada sistema de origen, con defectos de calidad sembrados a propósito (duplicados, nulos
-y formatos inconsistentes) para los capítulos 8 y 10, y los cargará en DuckDB en las capas
-raw, staging y curated.
-"""
+from .config import DEFAULT_SEED, DefectRates, Presence, Scale, SyntheticConfig
+from .generator import SyntheticDataset, generate
+from .io import read_raw, read_truth, write_dataset
 
-DEFAULT_SEED = 42
+__all__ = [
+    "DEFAULT_SEED", "DefectRates", "Presence", "Scale", "SyntheticConfig", "SyntheticDataset",
+    "generate", "read_raw", "read_truth", "write_dataset",
+]
