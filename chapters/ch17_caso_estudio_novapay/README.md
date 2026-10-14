@@ -53,7 +53,7 @@ uv run pytest chapters/ch17_caso_estudio_novapay
 - **Un warehouse propio.** NovaPay es una entidad separada y regulada, así que sus datos no se mezclan con los de NovaMercado. Las *herramientas* sí se reutilizan: RACI, reglas, linaje, clasificación, caso de negocio y revisión de jerga.
 - **La hoja a mano se simula tal cual.** Suma todo lo que es número, así que las duplicadas cuentan dos veces, los importes en texto se pierden y los signos cambiados restan. El error se mide frente al valor real, no se supone.
 - **No se inventan datos.** Si a un día le falta alguna partida, el informe remediado no calcula la ratio: el día queda incompleto y se pide el reenvío a la unidad. Por eso hay 77 días certificados de 90.
-- **SQL sin CTE.** La primera versión usaba CTE y el linaje se quedaba en ellas sin llegar a raw. Se reescribió con una SELECT por tabla. La lección para el caso: el SQL de un informe regulado se escribe para que se pueda trazar.
+- **El caso destapó un hueco del linaje.** La primera versión del SQL usaba CTE y el analizador del capítulo 7 se quedaba en ellas sin llegar a raw. Se corrigió el analizador (ahora sigue las CTE) en lugar de esconder el problema. La lección: si un informe regulado no se puede trazar hasta el origen, se arregla la herramienta o el SQL, nunca se da por bueno.
 - **La política de clasificación se amplía, no se copia.** La de NovaMercado es la de un retail y no conocía el IBAN. NovaPay añade su regla antes de clasificar.
 - **La opción aprobada no es la de mayor VAN.** El comité elige la rápida porque el VAN solo mide el beneficio interno, no las sanciones ni la confianza del supervisor. El informe lo dice explícitamente.
 

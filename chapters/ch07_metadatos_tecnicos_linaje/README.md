@@ -49,6 +49,7 @@ uv run pytest chapters/ch07_metadatos_tecnicos_linaje
 ## Decisiones de modelado
 
 - **El linaje sale del código, no de una documentación manual.** Se analizan los ficheros SQL de [src/dglab/warehouse/sql/](../../src/dglab/warehouse/sql/): si cambia una transformación, el linaje se actualiza en la siguiente ejecución.
+- **Las CTE se recorren como nodos intermedios.** El caso NovaPay (capítulo 17) mostró que, con `WITH`, el linaje se quedaba en la CTE y no llegaba a las tablas de origen. Ahora cada CTE es un nodo `<tabla>__<cte>` y la cadena llega hasta raw.
 - **Los filtros y las claves de unión también son dependencias.** La primera versión solo seguía las columnas proyectadas. Con ella, un cambio en `status` parecía no afectar a la venta neta, aunque el `WHERE status NOT IN ('cancelado', 'devuelto')` decide qué filas cuentan. Ahora las columnas del `WHERE` y del `ON` de los joins generan aristas de tipo *filtro* y *clave de unión*.
 - **Las tablas raw se enlazan con su sistema de origen** por el prefijo del nombre (`crm_`, `ecom_`, `pos_`, `erp_`).
 - **Validación por columnas de origen.** Lo que la narrativa cita se compara con las *raíces* del linaje: las columnas de raw de las que depende la cifra.

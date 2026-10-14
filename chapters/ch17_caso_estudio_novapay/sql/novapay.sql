@@ -2,7 +2,6 @@
 
 -- Staging: importes interpretados (también los escritos como texto en formato español),
 -- signo según el lado del balance y una sola fila por partida, unidad y día.
--- Sin CTE: una sola SELECT por tabla para que el linaje del capítulo 7 llegue hasta raw.
 CREATE OR REPLACE TABLE staging.stg_liquidity_items AS
 SELECT
     report_date || '|' || business_unit || '|' || item AS item_key,

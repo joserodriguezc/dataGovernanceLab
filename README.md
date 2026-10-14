@@ -257,6 +257,15 @@ uv run python -m chapters.ch17_caso_estudio_novapay.run
 
 ### Ejecutar todo de una vez
 
+Con un solo comando:
+
+```bash
+uv run dglab run-all                     # warehouse + capítulos 1 a 17 + repetir 4 y 5 para ver el avance
+uv run dglab run-all --start 6 --no-build  # retomar desde un capítulo sobre el warehouse actual
+```
+
+Se detiene en el primer capítulo que falle y termina con una tabla de tiempos. Es lo mismo que ejecutar a mano:
+
 ```bash
 uv run dglab build
 uv run python -m chapters.ch01_que_es_gobierno_datos.run
@@ -288,7 +297,7 @@ Este orden refleja la línea base: los capítulos 4 y 5 se ejecutan antes de doc
 uv run pytest                            # todos los tests
 uv run pytest chapters/ch04_linea_base_madurez  # los de un capítulo
 uv run ruff check .                      # lint
-uv run dglab --help                      # comandos del generador de datos (build, generate, load, reset)
+uv run dglab --help                      # comandos: build, generate, load, reset, run-all
 ```
 
 ## Estructura

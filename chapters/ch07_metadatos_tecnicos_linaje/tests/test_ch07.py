@@ -107,3 +107,23 @@ def test_run_publishes_lineage(tmp_path, small_warehouse):
     assert "raw.pos_sales.amount" in roots(g, "curated.agg_sales_daily_channel.revenue")
     validation = outputs["validation"].read_text(encoding="utf-8")
     assert "`raw.erp_products.unit_price` | ✅ | — |" in validation  # la narrativa se equivoca
+
+
+CTE_SQL = """
+CREATE TABLE curated.sales AS
+WITH paid AS (SELECT o.id, o.amount, o.sku FROM staging.orders AS o WHERE o.status = 'paid'),
+     enriched AS (SELECT p.id, p.amount, pr.cat FROM paid AS p
+                  JOIN staging.products AS pr ON pr.sku = p.sku)
+SELECT id, sum(amount) AS amount, cat FROM enriched GROUP BY id, cat;
+"""
+
+
+def test_cte_lineage_reaches_source_tables():
+    import networkx as nx
+    edges, steps = parse_sql(CTE_SQL, "cte.sql", SCHEMA)
+    g = column_graph(edges)
+    roots = {n for n in nx.ancestors(g, "curated.sales.amount") if g.in_degree(n) == 0}
+    assert "staging.orders.amount" in roots and "staging.orders.status" in roots
+    assert not any(r.startswith(".") for r in roots)
+    assert "curated.sales__paid.amount" in nx.ancestors(g, "curated.sales.amount")
+    assert set(steps[0].sources) == {"staging.orders", "staging.products"}

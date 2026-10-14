@@ -82,7 +82,60 @@ def _kind(projection: exp.Expression, target_column: str, sources: list[exp.Colu
     return "calculado"
 
 
+def cte_node(target: str, cte: str) -> str:
+    """Nodo intermedio de una CTE: se nombra a partir de la tabla que la define."""
+    return f"{target}__{cte}"
+
+
+def _select_edges(select: exp.Select, target: str, step: TableStep, sql_file: str,
+                  ctes: dict[str, str]) -> list[Edge]:
+    edges = []
+    tables = {t.alias_or_name: ctes.get(t.name) if not t.db and t.name in ctes
+              else f"{t.db}.{t.name}" for t in select.find_all(exp.Table)}
+    step.sources += [t for t in tables.values()
+                     if t not in step.sources and t not in ctes.values()]
+    where = select.args.get("where")
+    if where:
+        step.filters.append(where.this.sql(dialect=DIALECT))
+    group = select.args.get("group")
+    if group:
+        step.group_by = [g.sql(dialect=DIALECT) for g in group.expressions]
+    # Columnas de las claves de unión, por tabla unida
+    join_keys: dict[str, list[exp.Column]] = {}
+    for join in select.args.get("joins") or []:
+        on = join.args.get("on")
+        if on is not None:
+            join_keys[join.this.alias_or_name] = list(on.find_all(exp.Column))
+    filter_cols = list(where.find_all(exp.Column)) if where else []
+    for projection in select.expressions:
+        column = projection.alias_or_name
+        cols = list(projection.find_all(exp.Column))
+        kind = _kind(projection, column, cols)
+        inner = projection.this if isinstance(projection, exp.Alias) else projection
+        expression = inner.sql(dialect=DIALECT)
+        if not cols:  # constante: no hay columna de origen, pero sí transformación
+            edges.append(Edge(target, None, target, column, kind, expression, sql_file))
+        for c in cols:
+            edges.append(Edge(tables[c.table], c.name, target, column, kind,
+                              expression, sql_file))
+        # Dependencias indirectas: el filtro decide qué filas llegan a la columna y
+        # la clave de unión decide qué valor se trae de la tabla unida.
+        indirect = [(c, "filtro", where.this) for c in filter_cols]
+        for alias in {c.table for c in cols} & set(join_keys):
+            indirect += [(c, "clave de unión", None) for c in join_keys[alias]]
+        for c, how, node in indirect:
+            text = node.sql(dialect=DIALECT) if node is not None else c.sql(DIALECT)
+            edges.append(Edge(tables[c.table], c.name, target, column, how, text,
+                              sql_file))
+    return edges
+
+
 def parse_sql(sql: str, sql_file: str, schema: dict) -> tuple[list[Edge], list[TableStep]]:
+    """Aristas de columna de cada CREATE TABLE ... AS SELECT.
+
+    Las CTE se recorren en orden como nodos intermedios (`cte_node`), así el linaje llega
+    hasta las tablas de origen aunque la consulta use WITH.
+    """
     edges, steps = [], []
     for stmt in sqlglot.parse(sql, dialect=DIALECT):
         if not isinstance(stmt, exp.Create) or stmt.expression is None:
@@ -91,42 +144,17 @@ def parse_sql(sql: str, sql_file: str, schema: dict) -> tuple[list[Edge], list[T
         query = qualify(stmt.expression.copy(), schema=schema, dialect=DIALECT,
                         identify=False, quote_identifiers=False)
         step = TableStep(target, [], sql_file=sql_file)
+        ctes: dict[str, str] = {}
+        with_ = query.args.get("with_")
+        if with_ is not None:
+            query.set("with_", None)
+            for cte in with_.expressions:
+                node = cte_node(target, cte.alias)
+                for select in _selects(cte.this):
+                    edges += _select_edges(select, node, step, sql_file, ctes)
+                ctes[cte.alias] = node
         for select in _selects(query):
-            tables = {t.alias_or_name: f"{t.db}.{t.name}" for t in select.find_all(exp.Table)}
-            step.sources += [t for t in tables.values() if t not in step.sources]
-            where = select.args.get("where")
-            if where:
-                step.filters.append(where.this.sql(dialect=DIALECT))
-            group = select.args.get("group")
-            if group:
-                step.group_by = [g.sql(dialect=DIALECT) for g in group.expressions]
-            # Columnas de las claves de unión, por tabla unida
-            join_keys: dict[str, list[exp.Column]] = {}
-            for join in select.args.get("joins") or []:
-                on = join.args.get("on")
-                if on is not None:
-                    join_keys[join.this.alias_or_name] = list(on.find_all(exp.Column))
-            filter_cols = list(where.find_all(exp.Column)) if where else []
-            for projection in select.expressions:
-                column = projection.alias_or_name
-                cols = list(projection.find_all(exp.Column))
-                kind = _kind(projection, column, cols)
-                inner = projection.this if isinstance(projection, exp.Alias) else projection
-                expression = inner.sql(dialect=DIALECT)
-                if not cols:  # constante: no hay columna de origen, pero sí transformación
-                    edges.append(Edge(target, None, target, column, kind, expression, sql_file))
-                for c in cols:
-                    edges.append(Edge(tables[c.table], c.name, target, column, kind,
-                                      expression, sql_file))
-                # Dependencias indirectas: el filtro decide qué filas llegan a la columna y
-                # la clave de unión decide qué valor se trae de la tabla unida.
-                indirect = [(c, "filtro", where.this) for c in filter_cols]
-                for alias in {c.table for c in cols} & set(join_keys):
-                    indirect += [(c, "clave de unión", None) for c in join_keys[alias]]
-                for c, how, node in indirect:
-                    text = node.sql(dialect=DIALECT) if node is not None else c.sql(DIALECT)
-                    edges.append(Edge(tables[c.table], c.name, target, column, how, text,
-                                      sql_file))
+            edges += _select_edges(select, target, step, sql_file, ctes)
         steps.append(step)
     return edges, steps
 
