@@ -28,3 +28,6 @@ docs/*.pdf
 docs/*.epub
 docs/*.mobi
 docs/book/
+
+# Configuración local del editor
+.vscode/
