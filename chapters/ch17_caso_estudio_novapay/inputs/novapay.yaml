@@ -1,0 +1,112 @@
+# Caso de estudio: NovaPay, la filial financiera regulada de NovaMercado.
+company: NovaPay
+parent: NovaMercado
+as_of: 2027-03-31
+
+scenario: >-
+  NovaPay emite la tarjeta de crédito de NovaMercado y gestiona un monedero digital. Tras un
+  cierre de año complicado, el supervisor ha detectado que el informe diario de liquidez
+  (activos líquidos frente a obligaciones a corto plazo) tiene errores y ha pedido revisar
+  cómo se produce, qué sistemas y flujos de datos lo alimentan, y la gestión de datos de la
+  entidad. NovaPay acaba de contratar a su primer CDAO, que reporta al COO.
+
+# --- Datos sintéticos del informe de liquidez -------------------------------------------
+generation:
+  seed: 17
+  start: 2027-01-01
+  days: 90
+  customers: 600
+  # Cada unidad de negocio envía cada día su hoja de cálculo con sus partidas.
+  units:
+    Tesorería: {side: asset, items: {Caja y bancos centrales: 40000000, Deuda pública a corto plazo: 25000000}}
+    Monedero digital: {side: liability, items: {Saldos de clientes del monedero: 38000000}}
+    Tarjetas: {side: liability, items: {Financiación a corto plazo: 12000000, Saldos acreedores de tarjetas: 6000000}}
+  daily_noise: 0.04
+  # Defectos que se cuelan en las hojas de cálculo (proporción de filas)
+  defects:
+    duplicate_rows: 0.08         # la misma fila enviada dos veces (el 8 % del caso del libro)
+    text_amounts: 0.10           # importe escrito como texto "1.234.567,89"
+    missing_amount: 0.03
+    wrong_sign: 0.04             # obligación enviada con signo negativo
+  regulatory_minimum: 1.10       # activos líquidos / obligaciones a corto plazo
+
+# --- Descubrimiento inicial (primeras dos semanas) ----------------------------------------
+discovery:
+  - {who: Comité de dirección, finding: "El informe lo consolida Riesgos, pero cada unidad envía sus hojas de cálculo sin controles."}
+  - {who: Director de Riesgos (CRO), finding: "El proceso es muy manual y el equipo que lo prepara no tiene formación en calidad de datos."}
+  - {who: Preparadora del informe (Riesgos), finding: "Recibe ficheros con errores que nadie corrige; casi todo el conocimiento está en su cabeza."}
+  - {who: Supervisor, finding: "Necesita ver avances rápidos y entender quién responde de cada dato del informe."}
+
+themes:
+  - {theme: Segregación de funciones, observation: "Quien prepara el informe también lo revisa: no hay una segunda línea de defensa."}
+  - {theme: Formación, observation: "Nadie conoce para qué se usa cada dato ni qué hacer cuando hay un error."}
+  - {theme: Comunicación, observation: "Los errores no se escalan a nadie y persisten durante meses."}
+  - {theme: Responsabilidad, observation: "No está claro quién produce el informe ni quién responde de él."}
+  - {theme: Calidad de datos, observation: "Hay errores conocidos, pero nadie sabe si son materiales."}
+
+# --- RACI del informe antes y después de los quick wins -----------------------------------
+raci_roles:
+  cro: Director de Riesgos (CRO)
+  risk_analyst: Preparadora actual (Riesgos)
+  finance_preparer: Preparador en Finanzas corporativas
+  bu_stewards: Stewards de las unidades de negocio
+  cdao: CDAO
+raci_before:
+  - {name: Enviar los datos de cada unidad, A: bu_stewards, R: [bu_stewards], C: [], I: [risk_analyst]}
+  - {name: Preparar el informe de liquidez, A: cro, R: [risk_analyst], C: [bu_stewards], I: []}
+  - {name: Revisar el informe (segunda línea), A: cro, R: [risk_analyst], C: [], I: [cdao]}
+raci_after:
+  - {name: Enviar los datos de cada unidad, A: bu_stewards, R: [bu_stewards], C: [finance_preparer], I: [cdao]}
+  - {name: Preparar el informe de liquidez, A: finance_preparer, R: [finance_preparer], C: [bu_stewards], I: [cro]}
+  - {name: Revisar el informe (segunda línea), A: cro, R: [risk_analyst], C: [finance_preparer], I: [cdao]}
+  - {name: Formar a todos los implicados, A: finance_preparer, R: [finance_preparer], C: [cdao], I: [cro]}
+prepare_activity: Preparar el informe de liquidez
+review_activity: Revisar el informe (segunda línea)
+
+quick_wins:
+  - {theme: Responsabilidad, action: "Nombrar un preparador del informe en Finanzas corporativas"}
+  - {theme: Segregación de funciones, action: "Separar la preparación (Finanzas) de la revisión (Riesgos)"}
+  - {theme: Formación, action: "El preparador forma a stewards, Riesgos y CRO en el uso del informe y qué hacer ante un error"}
+  - {theme: Calidad de datos, action: "Lista de incidencias conocidas, priorizada, con reglas de calidad en cada envío"}
+  - {theme: Comunicación, action: "Documentar con los stewards técnicos de dónde sale cada cifra, de las hojas de cálculo al informe"}
+
+# --- Mensaje al comité de dirección: tres opciones (capítulo 1) ---------------------------
+horizon_months: 36
+discount_rate_annual: 0.08
+annual_benefit: 4200000   # multas evitadas, horas manuales y capital liberado (validado por el CFO)
+options:
+  - {id: fast, name: "Rápida: plan completo con contratistas desde el día 1", description: "Contratación de perfiles clave y contratistas inmediatos.", duration_months: 12, build_cost_usd: 8000000, run_cost_annual_usd: 900000}
+  - {id: preferred, name: "Equilibrada: equipo propio con apoyo puntual", description: "Ritmo sostenible, sin contratistas.", duration_months: 18, build_cost_usd: 6000000, run_cost_annual_usd: 800000}
+  - {id: slow, name: "Mínima: solo el informe de liquidez", description: "Arregla el informe pero no la gestión de datos de la entidad.", duration_months: 24, build_cost_usd: 3000000, run_cost_annual_usd: 600000}
+chosen_option: fast
+sponsors: [CFO, COO]
+
+long_term_plan:
+  - Gobierno de los datos y de todos los informes clave, no solo el de liquidez
+  - Políticas con los roles, requisitos y ubicación de la información clave
+  - "Herramientas mínimas de gestión de datos: catálogo y calidad de datos"
+  - Marco de calidad de datos con un responsable al frente
+  - Automatizar la producción de los informes
+  - Plataforma de datos central como única fuente para los informes clave
+
+# --- Entrega iterativa ----------------------------------------------------------------------
+buckets:
+  - Supervisión inmediata de la transformación del informe de liquidez
+  - Transformación a largo plazo de todos los datos e informes en alcance
+  - Estrategia de gestión de datos y analítica a largo plazo
+manual_steps:
+  - {step: Recibir las hojas de cálculo de cada unidad por email, automated: true}
+  - {step: Copiar y pegar en el libro consolidado, automated: true}
+  - {step: Corregir importes escritos como texto, automated: true}
+  - {step: Buscar filas duplicadas, automated: true}
+  - {step: Cuadrar con la contabilidad, automated: false}
+  - {step: Revisar variaciones inusuales, automated: false}
+  - {step: Redactar los comentarios del informe, automated: false}
+  - {step: Firmar y enviar al supervisor, automated: false}
+  - {step: Responder preguntas del supervisor, automated: false}
+  - {step: Archivar evidencias de la revisión, automated: false}
+
+# La política de clasificación del capítulo 6 es la de un retail: no conoce las cuentas
+# bancarias. NovaPay la amplía con su categoría financiera antes de clasificar.
+extra_pii_rules:
+  - {category: Dato financiero personal - IBAN, level: restricted, name_pattern: "iban", value_pattern: "^[A-Z]{2}[0-9]{2}[A-Z0-9 ]{11,30}$"}

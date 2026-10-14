@@ -40,7 +40,7 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 14 | Data Automation | `uv run python -m chapters.ch14_automatizacion.run` | Warehouse con el paso 10 (o el pipeline del paso 11) |
 | 15 | Adoption That Drives Business Success | `uv run python -m chapters.ch15_adopcion.run` | — (logs de uso simulados) |
 | 16 | Delivering Trusted Results | `uv run python -m chapters.ch16_resultados_confiables.run` | Pipeline del paso 11 (warehouse completo y registro de operaciones) |
-| 17 | Case Study – Financial Institution | Próximamente | |
+| 17 | Case Study – Financial Institution | `uv run python -m chapters.ch17_caso_estudio_novapay.run` | Ninguno: genera sus propios datos y su warehouse |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -236,12 +236,24 @@ uv run python -m chapters.ch15_adopcion.run
 
 ```bash
 uv run python -m chapters.ch16_resultados_confiables.run
+uv run python -m chapters.ch17_caso_estudio_novapay.run
 ```
 
 - **Qué produce:** la revisión de capacidades del libro (gobierno, metadatos, calidad, arquitectura, operaciones y datos primarios, cada una con 5 etapas). El estado de cada etapa sale de la **evidencia** que han dejado los capítulos anteriores. Además: los compromisos del capítulo 5 medidos de nuevo (cumplido, en plazo, riesgo anticipado o retrasado), un mensaje estructurado para cada desvío y mensajes para cada audiencia. Todo en un **informe HTML** consolidado.
 - **Qué mirar:** abre `outputs/capability_review.html` en el navegador.
 - **Qué probar:** reconstruye solo el warehouse (`uv run dglab build`) y ejecuta este paso: las etapas de metadatos, calidad y datos primarios pasan a pendientes, porque el estado no se declara, se comprueba. Después ejecuta el pipeline del paso 11 y vuelve a ejecutarlo.
 - [README del capítulo](chapters/ch16_resultados_confiables/README.md)
+
+### Paso 17. Caso de estudio: NovaPay, entidad financiera regulada
+
+```bash
+uv run python -m chapters.ch17_caso_estudio_novapay.run
+```
+
+- **Qué produce:** el caso del libro de punta a punta sobre NovaPay, con su propio warehouse (`data/warehouse/novapay.duckdb`). El informe de liquidez se consolidaba a mano desde hojas de cálculo con partidas duplicadas, importes en texto, vacíos y signos cambiados. El paso reutiliza las herramientas de los capítulos anteriores: segregación de funciones con la RACI (3), reglas de calidad antes y después de remediar (8), linaje de la ratio (7), clasificación de datos personales ampliada con el IBAN (6), opciones de inversión con VAN (1) y revisión de jerga del mensaje al supervisor (12). Genera el caso completo, el resumen para el comité de dirección, el mensaje al supervisor y un gráfico de la ratio manual frente a la remediada y la real.
+- **Qué mirar:** `outputs/case_study.md` y `outputs/liquidity_ratio.png`. La hoja a mano marca 25 días por debajo del mínimo regulatorio cuando en realidad fueron 6.
+- **Qué probar:** en `inputs/novapay.yaml`, sube `defects.missing_amount` y mira cómo bajan los días certificados; o vuelve a juntar preparación y revisión en `raci_after` y verás reaparecer el fallo de segregación.
+- [README del capítulo](chapters/ch17_caso_estudio_novapay/README.md)
 
 ### Ejecutar todo de una vez
 
@@ -263,6 +275,7 @@ uv run python -m chapters.ch13_quick_wins.run
 uv run python -m chapters.ch14_automatizacion.run
 uv run python -m chapters.ch15_adopcion.run
 uv run python -m chapters.ch16_resultados_confiables.run
+uv run python -m chapters.ch17_caso_estudio_novapay.run
 ```
 
 Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.

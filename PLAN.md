@@ -93,7 +93,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 
 | # | Capítulo | Microproyecto | Entregables | Criterio de aceptación |
 |---|---|---|---|---|
-| 17 | Case Study – Financial Institution | NovaPay de punta a punta | Datos de NovaPay (cuentas, transacciones, KYC), ejecución de los microproyectos, mensajes al comité ejecutivo y al regulador, resultados | Un solo comando ejecuta el caso completo |
+| 17 | Case Study – Financial Institution | NovaPay de punta a punta | Datos sintéticos de NovaPay con defectos de hoja de cálculo, warehouse propio, segregación de funciones con RACI, calidad antes y después, linaje de la ratio, PII con IBAN, opciones con VAN, resumen para el comité y mensaje al supervisor sin jerga, resultados a 3, 6 y 12 meses | Un solo comando ejecuta el caso completo; el informe remediado coincide con el valor real en todos los días completos |
 
 ## 5. Dependencias y orden recomendado
 
@@ -140,4 +140,4 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 14: Automatización | ✅ hecho |
 | Cap. 15: Adopción | ✅ hecho |
 | Cap. 16: Revisión de capacidades | ✅ hecho |
-| Cap. 17: Caso NovaPay | ⬜ pendiente |
+| Cap. 17: Caso NovaPay | ✅ hecho |

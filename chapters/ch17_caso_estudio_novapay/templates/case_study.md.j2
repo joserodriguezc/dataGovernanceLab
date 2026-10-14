@@ -1,0 +1,106 @@
+# Caso de estudio: {{ company }}, entidad financiera regulada
+
+> {{ scenario }}
+
+Tres retos, como en el libro: encontrar **quick wins** bajo presión regulatoria, **explicar la solución de largo plazo** al comité de dirección y al supervisor, y **diseñar una entrega iterativa** con impacto.
+
+## 1. Descubrimiento inicial (primeras dos semanas)
+
+| Con quién | Qué contó |
+|---|---|
+{% for d in discovery %}
+| {{ d.who }} | {{ d.finding }} |
+{% endfor %}
+
+### Temas clave
+
+| Tema | Observación |
+|---|---|
+{% for t in themes %}
+| **{{ t.theme }}** | {{ t.observation }} |
+{% endfor %}
+
+## 2. Lo que dicen los datos
+
+![Ratio de liquidez]({{ chart_name }})
+
+| | Hoja consolidada a mano | Informe remediado | Valor real |
+|---|---:|---:|---:|
+| Días por debajo del mínimo ({{ minimum | num(2) }}) | {{ manual_breaches }} | {{ curated_breaches }} (+{{ incomplete }} incompletos) | {{ true_breaches }} |
+| Error medio de la ratio frente al valor real | {{ manual_error | num(2) }} | {{ curated_error | num(4) }} | — |
+
+### Calidad de las partidas enviadas (capítulo 8)
+
+| Regla | Dimensión | Filas | Fallan | Válidas |
+|---|---|---:|---:|---:|
+{% for r in raw_results %}
+| {{ r.rule.id }} · {{ r.rule.description }} | {{ r.rule.dimension }} | {{ r.total | num }} | {{ r.failed | num }} | {{ r.pass_rate | pct(1) }} |
+{% endfor %}
+{% for r in curated_results %}
+| {{ r.rule.id }} · {{ r.rule.description }} *(tras remediar)* | {{ r.rule.dimension }} | {{ r.total | num }} | {{ r.failed | num }} | {{ r.pass_rate | pct(1) }} |
+{% endfor %}
+
+Las duplicadas cuentan las dos copias. Tras la remediación, los únicos problemas que quedan son los importes que faltan en origen: no se pueden arreglar en el warehouse sin inventar el dato.
+
+### De dónde sale la ratio (capítulo 7)
+
+`curated.fct_liquidity_report.liquidity_ratio` depende de: {{ roots | map("replace", "raw.", "") | join(", ") }}. Todo pasa por las hojas de las unidades: la responsabilidad de la calidad es de sus stewards.
+
+### Datos personales en NovaPay (capítulo 6)
+
+La política de clasificación de NovaMercado no conocía las cuentas bancarias: NovaPay la amplía con una regla para el IBAN.
+
+| Columna | Nivel | Categoría |
+|---|---|---|
+{% for c, level, cat in pii %}
+| `{{ c }}` | {{ level }} | {{ cat }} |
+{% endfor %}
+
+## 3. Quick wins
+
+**Segregación de funciones (RACI, capítulo 3):** antes, {{ before.overlap | join(", ") }} preparaba y revisaba el informe (❌). Después: {{ "✅ preparación y revisión separadas" if after.ok else "❌ siguen mezcladas" }}.
+
+{% for q in quick_wins %}
+- **{{ q.theme }}:** {{ q.action }}
+{% endfor %}
+
+El resumen para el comité está en [elt_summary.md](elt_summary.md).
+
+## 4. Solución de largo plazo para el comité de dirección
+
+{% for item in plan %}
+- {{ item }}
+{% endfor %}
+
+| Opción | Duración | Inversión | VAN a {{ horizon }} meses | Recuperación |
+|---|---:|---:|---:|---:|
+{% for r in options %}
+| {{ ("**" ~ r.option.name ~ "** ⬅️ aprobada") if r.option.id == chosen else r.option.name }} | {{ r.option.duration_months }} meses | {{ r.option.build_cost_usd | money }} | {{ r.npv | money }} | {{ ("mes " ~ r.payback_month) if r.payback_month else "fuera del horizonte" }} |
+{% endfor %}
+
+La opción aprobada no es la de mayor VAN: con el supervisor encima, el comité paga más por cerrar antes el riesgo regulatorio. El VAN solo mide el beneficio interno; no incluye sanciones ni la pérdida de confianza del supervisor.
+
+{{ sponsors | join(" y ") }} copatrocinan el programa y copresiden el comité empresarial de datos.
+
+## 5. Mensaje al supervisor
+
+Mismos materiales que el comité de dirección, con transparencia: [regulator_message.md](regulator_message.md). Revisión del mensaje: {{ review.words }} palabras, {% if review.jargon %}⚠️ jerga: {{ review.jargon | join(", ") }}{% else %}sin jerga de datos{% endif %}.
+
+## 6. Entrega iterativa con impacto
+
+Cadencia mensual con el comité de datos, en tres bloques:
+{% for b in buckets %}
+{{ loop.index }}. {{ b }}
+{% endfor %}
+
+**Indicador de confianza del informe:** un día se certifica si está documentado (capítulo 6), tiene linaje (capítulo 7) y supera la calidad (capítulo 8). Hoy: **{{ certified }} de {{ total }} días certificados**.
+
+## 7. Resultados
+
+| Hito | Qué se ha conseguido | Medida |
+|---|---|---|
+| **A los 3 meses (hoy)** | Flujo de extremo a extremo documentado, responsabilidad clara de todos los roles y borrador de política | {{ roots | length }} orígenes trazados; segregación {{ "✅" if after.ok else "❌" }}; {{ docs }} tablas documentadas |
+| **A los 6 meses (objetivo)** | Políticas aprobadas, responsabilidad sobre todos los informes clave, herramientas en marcha, incidencias inmediatas resueltas | El supervisor reduce la frecuencia de reuniones |
+| **A los 12 meses (objetivo)** | Primeras plataformas en producción y el informe de liquidez como referencia de la entidad | Incidencias de calidad reducidas un **{{ issue_reduction | pct }}** (medido) · procesos manuales automatizados: **{{ automated | pct }}** (medido) |
+
+> Nunca hay que desaprovechar una crisis: con la atención del comité de dirección se puede **demostrar**, no solo contar, cómo se gestionan bien los datos.

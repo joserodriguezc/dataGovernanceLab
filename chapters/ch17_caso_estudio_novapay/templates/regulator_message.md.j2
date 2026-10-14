@@ -1,0 +1,19 @@
+# {{ company }} · Plan de remediación del informe de liquidez
+
+*Para el supervisor · los mismos materiales que ha visto el comité de dirección*
+
+**Qué ha pasado.** El informe diario de liquidez se montaba sumando a mano las hojas de cálculo de tres unidades. Las partidas repetidas, los importes escritos como texto y los signos cambiados hacían que la ratio que se enviaba no fuera la real: en {{ days }} días se habría informado de {{ manual_breaches }} incumplimientos del mínimo cuando hubo {{ true_breaches }}.
+
+**Qué hemos hecho ya.**
+{% for q in quick_wins %}
+- {{ q.action }}.
+{% endfor %}
+
+**Qué vamos a hacer.** El comité de dirección ha aprobado la opción «{{ option.option.name }}»: {{ option.option.build_cost_usd | money }} en {{ option.option.duration_months }} meses, con {{ sponsors | join(" y ") }} como sponsors y presidiendo el comité de datos. El plan va más allá de este informe:
+{% for item in plan %}
+- {{ item }}.
+{% endfor %}
+
+**Cómo lo verá.** Cada informe diario llevará una marca de confianza: está documentado, se conoce de dónde sale cada cifra y supera los controles de calidad. Hoy la llevan {{ certified }} de {{ total }} días; los demás tienen alguna partida sin importe y se pide su reenvío a la unidad antes de enviar el informe.
+
+**Seguimiento.** Recibirá los mismos materiales que el comité de datos, dos semanas después de cada reunión mensual, para que pueda comentar o preguntar.

@@ -1,0 +1,24 @@
+# {{ company }} · Informe de liquidez: lo que hemos encontrado y lo que ya hemos hecho
+
+*Resumen para el comité de dirección · semana 2 del CDAO*
+
+## 1. Responsabilidad
+
+| Antes | Ahora |
+|---|---|
+| {{ before.overlap | join(", ") }}: preparaba y revisaba el mismo informe | Prepara Finanzas corporativas y revisa Riesgos: {{ "✅ funciones separadas" if after.ok else "⚠️ siguen mezcladas" }} |
+| Nadie respondía del informe | El CRO es el responsable del informe y cada unidad tiene un steward de sus datos |
+
+## 2. Proceso y calidad del informe
+
+- En {{ days }} días, la hoja consolidada daba una ratio de liquidez **por debajo del mínimo regulatorio en {{ manual_breaches }} días**. En realidad solo ocurrió en **{{ true_breaches }}**.
+- Error medio de la ratio en la hoja: **{{ manual_error | num(2) }} puntos**. En el informe remediado: **{{ curated_error | num(4) }}** en los días completos.
+- {{ issues_raw | num }} problemas de calidad en las partidas enviadas: {{ issue_breakdown }}.
+
+## 3. Pasos inmediatos
+
+{% for q in quick_wins %}
+- **{{ q.theme }}:** {{ q.action }}
+{% endfor %}
+
+**Siguiente cita:** revisión con el supervisor con estos mismos materiales.
