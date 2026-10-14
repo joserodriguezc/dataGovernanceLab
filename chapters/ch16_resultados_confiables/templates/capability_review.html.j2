@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisión de capacidades de {{ company }}</title>
+<style>
+  :root {
+    --bg: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --line: #e1e0d9; --good: #0ca30c; --warn: #b77900; --bad: #d03b3b; --accent: #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+      --line: #2c2c2a; --good: #0ca30c; --warn: #fab219; --bad: #e66767; --accent: #3987e5;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 40px 0 12px; }
+  h3 { font-size: 16px; margin: 24px 0 8px; }
+  p.lead { color: var(--ink-2); margin: 0 0 24px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .tile .v { font-size: 26px; font-weight: 600; }
+  .tile .l { color: var(--ink-2); font-size: 13px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin: 12px 0; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--ink-2); font-weight: 600; font-size: 13px; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .s { white-space: nowrap; font-weight: 600; }
+  .s.done { color: var(--good); } .s.partial { color: var(--warn); } .s.missing { color: var(--bad); }
+  img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); background: #fcfcfb; }
+  .msg { border-left: 3px solid var(--accent); padding: 8px 14px; margin: 10px 0; }
+  .msg.var { border-left-color: var(--warn); }
+  .muted { color: var(--muted); font-size: 13px; }
+  ul { padding-left: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Revisión de capacidades de {{ company }}</h1>
+  <p class="lead">Resultados confiables con resultados que importan · corte {{ as_of.strftime("%d/%m/%Y") }} · cada estado sale de la evidencia de los capítulos 1-15, no de lo que se declara.</p>
+
+  <div class="tiles">
+    <div class="tile"><div class="v">{{ stage_done }} / {{ stage_total }}</div><div class="l">etapas de capacidad entregadas</div></div>
+    <div class="tile"><div class="v">{{ counts.met }} / {{ items | length }}</div><div class="l">compromisos de datos cumplidos</div></div>
+    <div class="tile"><div class="v">{{ counts.on_track }}</div><div class="l">en plazo</div></div>
+    <div class="tile"><div class="v">{{ counts.at_risk + counts.late }}</div><div class="l">desvíos comunicados con plan</div></div>
+    <div class="tile"><div class="v">{{ counts.late_unexplained }}</div><div class="l">retrasos sin causa raíz</div></div>
+  </div>
+
+  <h2>Mapa de capacidades</h2>
+  <img src="data:image/png;base64,{{ chart_b64 }}" alt="Matriz de capacidades por etapa: {{ stage_done }} de {{ stage_total }} etapas entregadas">
+
+  {% for cap in caps %}
+  <h3>{{ cap.name }}</h3>
+  <div class="card scroll">
+    <table>
+      <tr><th>Etapa</th><th>Entregable</th><th>Impacto para el stakeholder</th><th>Evidencia</th><th>Estado</th></tr>
+      {% for st in cap.stages %}
+      <tr><td>{{ stage_labels[st.key] }}</td><td>{{ st.deliverable }}</td><td>{{ st.impact }}</td><td>{{ st.evidence }}</td>
+          <td class="s {{ st.status }}">{{ status_labels[st.status] }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endfor %}
+
+  <h2>Compromisos frente a resultados (capítulo 5)</h2>
+  <div class="card scroll">
+    <table>
+      <tr><th>Resultado</th><th>Compromiso de datos</th><th>Objetivo</th><th>Medido hoy</th><th>Fecha</th><th>Estado</th></tr>
+      {% for c in items %}
+      <tr><td>{{ c.outcome_id }}</td><td>{{ c.name }}</td><td class="num">{{ c.target }}</td><td class="num">{{ c.measured }}</td><td>{{ c.due.strftime("%d/%m/%Y") }}</td>
+          <td class="s {{ c_class[c.status] }}">{{ c_labels[c.status] }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <h2>Comunicar los desvíos</h2>
+  <p>Fallar con transparencia construye confianza: un programa que siempre está en verde no se cree. Cada desvío se comunica en cuanto se detecta, también antes de que venza, con la misma estructura.</p>
+  {% for c in items if c.needs_message %}
+  <div class="msg var">
+    <strong>{{ c.name }}</strong> ({{ c.outcome_id }}) · <span class="s {{ c_class[c.status] }}">{{ c_labels[c.status] }}</span><br>
+    <b>Qué ha pasado:</b> el objetivo es {{ c.target }} para el {{ c.due.strftime("%d/%m/%Y") }} y hoy estamos en {{ c.measured }}.<br>
+    {% if c.variance %}
+    <b>Por qué:</b> {{ c.variance.why }}<br>
+    <b>Qué vamos a hacer:</b> {{ c.variance.plan }} · responsable: {{ c.variance.owner }} · antes del {{ c.variance.new_date.strftime("%d/%m/%Y") }}.<br>
+    <b>Ajuste del compromiso:</b> {{ c.variance.adjustment }}
+    {% else %}
+    <b>⚠️ Falta la causa raíz:</b> hay que analizarla antes de comunicar este desvío.
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <h2>Un mensaje para cada audiencia</h2>
+  {% for a in audience_msgs %}
+  <div class="msg">
+    <strong>{{ a.name }}</strong> <span class="muted">· {{ a.focus }}</span>
+    <ul>{% for line in a.lines %}<li>{{ line }}</li>{% endfor %}</ul>
+  </div>
+  {% endfor %}
+  <p class="muted">Revisión del mensaje al comité de dirección: {% if exec_review.jargon %}⚠️ jerga a traducir: {{ exec_review.jargon | join(", ") }}{% else %}sin jerga de datos{% endif %}.</p>
+</main>
+</body>
+</html>

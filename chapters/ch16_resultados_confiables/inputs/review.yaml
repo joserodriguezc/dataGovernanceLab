@@ -1,0 +1,87 @@
+# Revisión de capacidades y comunicación de resultados de NovaMercado.
+as_of: 2027-01-31
+
+# Las 5 etapas del capítulo para cada capacidad. "check" es la comprobación de evidencia
+# implementada en evidence.py; "impact" es lo que el stakeholder entiende cuando se cumple.
+capabilities:
+  - id: governance
+    name: Gobierno de datos
+    stages:
+      define: {deliverable: Modelo organizativo y operativo del gobierno de datos, check: org_model, impact: Los stakeholders saben cómo se organiza el equipo y cómo trabajar con él}
+      document: {deliverable: Política y estándares de gobierno de datos, check: policy, impact: Saben qué se espera de ellos y cómo aplicar la política}
+      analyze: {deliverable: Evaluación de madurez de gestión de datos, check: maturity, impact: Conocen el estado real y cómo se compara la empresa}
+      optimize: {deliverable: Hoja de ruta de despliegue del gobierno de datos, check: roadmap, impact: Saben qué se va a desplegar y cuándo}
+      sustain: {deliverable: Medición de la eficacia del programa, check: progress_report, impact: Ven el valor del programa y los resultados que pueden medir}
+  - id: metadata
+    name: Metadatos de negocio y técnicos
+    stages:
+      define: {deliverable: Elementos y fuentes clave y estándar de metadatos, check: metadata_standard, impact: Saben qué datos están en alcance, de dónde vienen y cómo se gestionan}
+      document: {deliverable: Metadatos de negocio y técnicos documentados, check: documented_tables, impact: Encuentran los metadatos de los datos que les importan}
+      analyze: {deliverable: Uso de los metadatos para entender origen, uso y calidad, check: lineage, impact: Ven dónde hay oportunidades de optimizar}
+      optimize: {deliverable: Optimizar controles, procesos, fuentes y flujos, check: lineage_validation, impact: Simplifican su entorno y usan fuentes confiables}
+      sustain: {deliverable: Medir la eficacia de los metadatos, check: metadata_compliance, impact: Conocen la fiabilidad de los metadatos}
+  - id: quality
+    name: Calidad de datos
+    stages:
+      define: {deliverable: Reglas, métricas y umbrales de calidad, check: dq_rules, impact: Saben qué es un dato de calidad y cómo se mide}
+      document: {deliverable: Reglas de negocio ligadas a los resultados, check: dq_severity, impact: Documentan qué nivel de calidad necesita cada resultado}
+      analyze: {deliverable: Reglas en producción y resultados publicados, check: dq_results, impact: Saben qué datos usar con cautela y cuáles son confiables}
+      optimize: {deliverable: Causas raíz y remediación de las incidencias, check: dq_issues, impact: Encuentran y corrigen las causas raíz}
+      sustain: {deliverable: Monitorización de la calidad en el día a día, check: dq_in_pipeline, impact: Reciben alertas cuando la calidad baja del umbral}
+  - id: architecture
+    name: Arquitectura de datos
+    stages:
+      define: {deliverable: Principios de arquitectura, check: principles, impact: Conocen la estrella polar de la arquitectura}
+      document: {deliverable: Arquitectura objetivo documentada, check: to_be, impact: Ven y pueden aportar al diseño objetivo}
+      analyze: {deliverable: Análisis de brechas entre el estado actual y el objetivo, check: arch_gaps, impact: Ven el esfuerzo y la complejidad de la transición}
+      optimize: {deliverable: Plan estratégico de transición, check: arch_roadmap, impact: Priorizan inversiones según el estado objetivo}
+      sustain: {deliverable: Nuevas inversiones evaluadas contra el estado objetivo, check: sdlc_review, impact: Ponen a prueba cada inversión frente al futuro}
+  - id: operations
+    name: Operaciones de datos
+    stages:
+      define: {deliverable: Patrones de integración, herramientas y flujo de valor, check: value_stream, impact: Ven las opciones para optimizar el movimiento de datos}
+      document: {deliverable: Oportunidades para agilizar el movimiento de datos, check: automation_case, impact: Ven dónde los datos pueden llegar antes}
+      analyze: {deliverable: Planes de optimización del movimiento de datos, check: automation_roi, impact: Saben qué inversiones aceleran sus resultados}
+      optimize: {deliverable: Inversiones que se autofinancian con el ahorro, check: self_funding, impact: Construyen un círculo virtuoso de mejora}
+      sustain: {deliverable: Operación medida en cada ejecución, check: ops_runs, impact: Confían en que los datos llegan a tiempo}
+  - id: primary
+    name: Datos primarios (cliente)
+    stages:
+      define: {deliverable: Definición común de cliente, check: customer_definition, impact: Todos hablan del mismo cliente}
+      document: {deliverable: Atributos con fuente dorada y steward, check: trust_logic, impact: Saben de dónde sale cada dato del cliente}
+      analyze: {deliverable: Deduplicación medida, check: golden_record, impact: Conocen cuántos clientes tienen de verdad}
+      optimize: {deliverable: Enriquecimiento y datos de referencia, check: reference_data, impact: Tienen clientes con localización y región}
+      sustain: {deliverable: Adopción del cliente único, check: pdm_adoption, impact: Usan el cliente único en su trabajo diario}
+
+# Compromisos del capítulo 5 que no se cumplen: causa raíz y plan (para el mensaje de desvío)
+variances:
+  "Controles de calidad superados al 99 %":
+    why: Los precios negativos del POS (DQ-08) y las fechas en dos formatos del e-commerce no se corrigen en origen; las reglas los detectan, pero nadie los arregla.
+    plan: Validación de precios en el POS y formato único de fecha en el alta online
+    owner: Steward técnico de ventas
+    new_date: 2027-04-30
+    adjustment: El objetivo del 99 % se mantiene; se añade un objetivo intermedio del 97 % para marzo.
+  "Contactos válidos por encima del 98 %":
+    why: El 26 % de los registros de cliente de origen no tiene un email válido y el formulario de alta todavía no lo valida.
+    plan: Email obligatorio y validado en el alta del CRM y del e-commerce
+    owner: Responsable de CRM
+    new_date: 2027-05-31
+    adjustment: Se mide sobre el golden record (95 % hoy) en lugar de sobre los registros de origen.
+  "Dominio de cliente con stewards activos":
+    why: El nombramiento del steward técnico de cliente se retrasó por la contratación del responsable de datos maestros.
+    plan: Nombrar al steward técnico con el apoyo del CIO
+    owner: CMO
+    new_date: 2027-02-28
+    adjustment: Sin cambios en el resultado de negocio; se retrasa un mes el hito D5.
+  "Reglas de cliente único aprobadas":
+    why: Falta la aprobación formal de las reglas de supervivencia por la steward de cliente, aunque ya están en producción en el capítulo 10.
+    plan: Aprobación de las reglas en el consejo de datos de febrero
+    owner: Responsable de CRM
+    new_date: 2027-02-15
+    adjustment: Sin cambios.
+
+# Audiencias para los mensajes
+audiences:
+  - {id: executives, name: Comité de dirección, focus: "Resultados de negocio y valor"}
+  - {id: managers, name: Directores de área, focus: "Hitos, desvíos y qué necesitamos de ellos"}
+  - {id: stewards, name: Stewards de datos, focus: "Qué capacidades funcionan y qué tienen que hacer"}

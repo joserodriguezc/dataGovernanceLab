@@ -39,7 +39,8 @@ La idea es leer un capítulo del libro y después ejecutar y explorar su micropr
 | 13 | Delivering Quick Wins with Impact | `uv run python -m chapters.ch13_quick_wins.run` | Warehouse; para medir los problemas, pasos 6 a 10 |
 | 14 | Data Automation | `uv run python -m chapters.ch14_automatizacion.run` | Warehouse con el paso 10 (o el pipeline del paso 11) |
 | 15 | Adoption That Drives Business Success | `uv run python -m chapters.ch15_adopcion.run` | — (logs de uso simulados) |
-| 16-17 | Próximamente | Ver el estado en [PLAN.md](PLAN.md) | |
+| 16 | Delivering Trusted Results | `uv run python -m chapters.ch16_resultados_confiables.run` | Pipeline del paso 11 (warehouse completo y registro de operaciones) |
+| 17 | Case Study – Financial Institution | Próximamente | |
 
 "Necesita" indica de qué depende cada paso: el warehouse (paso 0) o los YAML de `inputs/` de capítulos anteriores, que ya están en el repositorio, así que no hace falta ejecutar antes esos capítulos. Aun así, el orden recomendado es el de la tabla, porque así se sigue el razonamiento del libro.
 
@@ -231,6 +232,17 @@ uv run python -m chapters.ch15_adopcion.run
 - **Qué probar:** en `inputs/adoption.yaml`, mejora la encuesta de la plataforma de visualización y sube su `share` para simular el relanzamiento: cambian el diagnóstico y el coste.
 - [README del capítulo](chapters/ch15_adopcion/README.md)
 
+### Paso 16. Resultados confiables con resultados que importan
+
+```bash
+uv run python -m chapters.ch16_resultados_confiables.run
+```
+
+- **Qué produce:** la revisión de capacidades del libro (gobierno, metadatos, calidad, arquitectura, operaciones y datos primarios, cada una con 5 etapas). El estado de cada etapa sale de la **evidencia** que han dejado los capítulos anteriores. Además: los compromisos del capítulo 5 medidos de nuevo (cumplido, en plazo, riesgo anticipado o retrasado), un mensaje estructurado para cada desvío y mensajes para cada audiencia. Todo en un **informe HTML** consolidado.
+- **Qué mirar:** abre `outputs/capability_review.html` en el navegador.
+- **Qué probar:** reconstruye solo el warehouse (`uv run dglab build`) y ejecuta este paso: las etapas de metadatos, calidad y datos primarios pasan a pendientes, porque el estado no se declara, se comprueba. Después ejecuta el pipeline del paso 11 y vuelve a ejecutarlo.
+- [README del capítulo](chapters/ch16_resultados_confiables/README.md)
+
 ### Ejecutar todo de una vez
 
 ```bash
@@ -250,6 +262,7 @@ uv run python -m chapters.ch12_lanzamiento.run
 uv run python -m chapters.ch13_quick_wins.run
 uv run python -m chapters.ch14_automatizacion.run
 uv run python -m chapters.ch15_adopcion.run
+uv run python -m chapters.ch16_resultados_confiables.run
 ```
 
 Para dejar solo el warehouse completo (carga y capítulos 10, 6, 7 y 8) basta con el pipeline del paso 11: `uv run python -m chapters.ch11_operaciones_datos.pipeline`.

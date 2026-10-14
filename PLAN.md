@@ -87,7 +87,7 @@ Esta fase es necesaria antes del capítulo 4 y de todos los técnicos.
 | 13 | Delivering Quick Wins with Impact | Backlog priorizado | Racionalización de necesidades, priorización con tamaño medido en el warehouse, opciones y corto/largo plazo, roadmap por capacidad, producto/servicio/activo, comunicación, registro de propiedad, ideas y plantillas | Cada problema está ligado a un resultado del capítulo 5 |
 | 14 | Data Automation | Automatizar un proceso manual | Los 6 pasos sobre el informe semanal de ventas por región: enfoques A/B/C con ROI, informe automatizado que cuadra con la cifra oficial, monitorización con umbral estadístico y evaluación de proveedores de enriquecimiento contra el solucionario | El informe automatizado cuadra al céntimo con la cifra oficial; el ROI se calcula con la fórmula del libro |
 | 15 | Adoption That Drives Business Success | Métricas de adopción | Logs de uso simulados de 4 soluciones (una con lanzamiento fallido), adopción, retención y uso por departamento, coste de la baja adopción, diagnóstico solución/empresa/líder con recuperación y hoja de ruta tras la salida en vivo | Se detecta el lanzamiento fallido y se cuantifica su coste |
-| 16 | Delivering Trusted Results | Revisión de capacidades | Reporte HTML consolidado de los capítulos 6–11 y plantilla para comunicar desvíos | El reporte compara los compromisos del capítulo 5 con los resultados reales |
+| 16 | Delivering Trusted Results | Revisión de capacidades | 6 capacidades × 5 etapas con estado comprobado sobre la evidencia de los capítulos 1-15, compromisos del capítulo 5 (cumplido, en plazo, riesgo anticipado, retrasado), mensajes de desvío y por audiencia, informe HTML consolidado | Ningún estado se declara a mano; ningún retraso queda sin causa raíz |
 
 ### Parte 4: Caso de estudio
 
@@ -139,5 +139,5 @@ Orden de trabajo: **Capítulos 1 → 2 → 3 → Fase 0 → 4 → 5 → … → 
 | Cap. 13: Quick wins | ✅ hecho |
 | Cap. 14: Automatización | ✅ hecho |
 | Cap. 15: Adopción | ✅ hecho |
-| Cap. 16: Revisión de capacidades | ⬜ pendiente |
+| Cap. 16: Revisión de capacidades | ✅ hecho |
 | Cap. 17: Caso NovaPay | ⬜ pendiente |
